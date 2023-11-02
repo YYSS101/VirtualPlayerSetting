@@ -14,7 +14,7 @@ namespace MLib
 	/// 2022.1.25 m.ueda
 	/// </remarks>
 	[Serializable()]
-	public static class SerializeMgr
+	public static class JsonSerializeMgr
 	{
 		///  <summary>
 		/// 指定ファイルへシリアライズする処理（JSON形式ファイルの書き込み処理）
@@ -23,7 +23,7 @@ namespace MLib
 		/// <param name="filePath">保存XJSONファイルパス</param>
 		/// <param name="mode">ファイル作成モード</param>
 		/// <returns>True:成功　False:失敗</returns>
-		public static bool SerializeJson( object target, string filePath, FileMode mode = FileMode.Create )
+		public static bool Serialize( object target, string filePath, FileMode mode = FileMode.Create )
 		{
 			bool isResult = false;
 			FileStream? sysFs = null;
@@ -72,7 +72,7 @@ namespace MLib
 		/// <param name="targetType">XMLから読み込むするオブジェクトタイプ</param>
 		/// <param name="filePath">読込XMLファイルパス</param>
 		/// <returns>True:成功　False:失敗</returns>
-		public static object? DeSerializeJson( Type targetType, string filePath )
+		public static object? DeSerialize( Type targetType, string filePath )
 		{
 			object? objReturn = null;
 			FileStream? sysFs = null;

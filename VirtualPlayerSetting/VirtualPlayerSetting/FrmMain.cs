@@ -1,12 +1,15 @@
 using MLib;
+using System;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO.Compression;
 using System.Media;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using VirtualPlayerSetting.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 
@@ -18,17 +21,42 @@ namespace VirtualPlayerSetting
 		SoundPlayer SoundPlayClient = new();
 
 
-		public FrmMain()
-		{
-			InitializeComponent();
-		}
-
-
-
 		string IconFileName = "Icon.png";
 
 		string PackageExt = ".zip";     // テスト用拡張子
 																		//		string PackageExt = ".ysvp";
+
+
+
+
+
+
+
+		public FrmMain()
+		{
+			InitializeComponent();
+
+
+			var sysParam = new SystemParam();
+
+			JsonSerializerOptions options = new JsonSerializerOptions()
+			{
+				WriteIndented = true,
+			};
+
+			string json = JsonSerializer.Serialize( sysParam, options );
+
+			string jsonPath = Path.Combine( PathMgr.ParameterPath, "SystemParam.json" );
+
+			File.WriteAllText( jsonPath, json );
+
+
+			string dJson = File.ReadAllText( jsonPath );
+
+			var sysParam2 = JsonSerializer.Deserialize<SystemParam>( dJson );
+
+		}
+
 
 
 

@@ -44,7 +44,13 @@ namespace MLib
 			get { return GetAndCreateDirectoryPath( TempPath, "Sound" ); }
 		}
 
-
+		/// <summary>
+		/// パラメータフォルダパス
+		/// </summary>
+		public static string ParameterPath
+		{
+			get { return GetAndCreateDirectoryPath( AppPath, "Parameter" ); }
+		}
 
 		/// <summary>
 		/// パッケージパス
