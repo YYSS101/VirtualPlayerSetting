@@ -30,27 +30,28 @@
 		{
 			PbIcon = new PictureBox();
 			BtnIconAdd = new Button();
-			BtnIconDel = new Button();
-			listBox1 = new ListBox();
+			LbSounds = new ListBox();
 			BtnSoundAdd = new Button();
 			BtnSoundDel = new Button();
 			BtnLoad = new Button();
 			BtnSave = new Button();
 			TbName = new TextBox();
+			BtnSoundPlay = new Button();
 			( (System.ComponentModel.ISupportInitialize) PbIcon  ).BeginInit();
 			SuspendLayout();
 			// 
 			// PbIcon
 			// 
+			PbIcon.BorderStyle = BorderStyle.FixedSingle;
 			PbIcon.Location = new Point( 38, 119 );
 			PbIcon.Name = "PbIcon";
-			PbIcon.Size = new Size( 127, 116 );
+			PbIcon.Size = new Size( 128, 128 );
 			PbIcon.TabIndex = 0;
 			PbIcon.TabStop = false;
 			// 
 			// BtnIconAdd
 			// 
-			BtnIconAdd.Location = new Point( 28, 257 );
+			BtnIconAdd.Location = new Point( 38, 253 );
 			BtnIconAdd.Name = "BtnIconAdd";
 			BtnIconAdd.Size = new Size( 75, 23 );
 			BtnIconAdd.TabIndex = 1;
@@ -58,24 +59,15 @@
 			BtnIconAdd.UseVisualStyleBackColor = true;
 			BtnIconAdd.Click += BtnIconAdd_Click;
 			// 
-			// BtnIconDel
+			// LbSounds
 			// 
-			BtnIconDel.Location = new Point( 109, 257 );
-			BtnIconDel.Name = "BtnIconDel";
-			BtnIconDel.Size = new Size( 75, 23 );
-			BtnIconDel.TabIndex = 1;
-			BtnIconDel.Text = "Del";
-			BtnIconDel.UseVisualStyleBackColor = true;
-			BtnIconDel.Click += BtnIconDel_Click;
-			// 
-			// listBox1
-			// 
-			listBox1.FormattingEnabled = true;
-			listBox1.ItemHeight = 15;
-			listBox1.Location = new Point( 268, 82 );
-			listBox1.Name = "listBox1";
-			listBox1.Size = new Size( 174, 124 );
-			listBox1.TabIndex = 2;
+			LbSounds.FormattingEnabled = true;
+			LbSounds.ItemHeight = 15;
+			LbSounds.Location = new Point( 268, 82 );
+			LbSounds.Name = "LbSounds";
+			LbSounds.Size = new Size( 174, 124 );
+			LbSounds.TabIndex = 2;
+			LbSounds.DoubleClick += LbSounds_DoubleClick;
 			// 
 			// BtnSoundAdd
 			// 
@@ -123,6 +115,17 @@
 			TbName.Name = "TbName";
 			TbName.Size = new Size( 201, 23 );
 			TbName.TabIndex = 3;
+			TbName.KeyPress += TbName_KeyPress;
+			// 
+			// BtnSoundPlay
+			// 
+			BtnSoundPlay.Location = new Point( 268, 241 );
+			BtnSoundPlay.Name = "BtnSoundPlay";
+			BtnSoundPlay.Size = new Size( 75, 23 );
+			BtnSoundPlay.TabIndex = 1;
+			BtnSoundPlay.Text = "Play";
+			BtnSoundPlay.UseVisualStyleBackColor = true;
+			BtnSoundPlay.Click += BtnSoundPlay_Click;
 			// 
 			// FrmMain
 			// 
@@ -130,12 +133,12 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size( 800, 450 );
 			Controls.Add( TbName );
-			Controls.Add( listBox1 );
+			Controls.Add( LbSounds );
 			Controls.Add( BtnSoundDel );
 			Controls.Add( BtnSave );
 			Controls.Add( BtnLoad );
+			Controls.Add( BtnSoundPlay );
 			Controls.Add( BtnSoundAdd );
-			Controls.Add( BtnIconDel );
 			Controls.Add( BtnIconAdd );
 			Controls.Add( PbIcon );
 			Name = "FrmMain";
@@ -151,12 +154,12 @@
 
 		private PictureBox PbIcon;
 		private Button BtnIconAdd;
-		private Button BtnIconDel;
-		private ListBox listBox1;
+		private ListBox LbSounds;
 		private Button BtnSoundAdd;
 		private Button BtnSoundDel;
 		private Button BtnLoad;
 		private Button BtnSave;
 		private TextBox TbName;
+		private Button BtnSoundPlay;
 	}
 }

@@ -41,7 +41,7 @@ namespace MLib
 		/// </summary>
 		public static string SoundPath
 		{
-			get { return GetAndCreateDirectoryPath( AppPath, "Sound" ); }
+			get { return GetAndCreateDirectoryPath( TempPath, "Sound" ); }
 		}
 
 

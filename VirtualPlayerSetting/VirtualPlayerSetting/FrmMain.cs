@@ -1,13 +1,23 @@
 using MLib;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO.Compression;
+using System.Media;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 
 namespace VirtualPlayerSetting
 {
 	public partial class FrmMain : Form
 	{
+
+		SoundPlayer SoundPlayClient = new();
+
+
 		public FrmMain()
 		{
 			InitializeComponent();
@@ -16,7 +26,9 @@ namespace VirtualPlayerSetting
 
 
 		string IconFileName = "Icon.png";
-		string SoundDirName = "Sound";
+
+		string PackageExt = ".zip";     // テスト用拡張子
+																		//		string PackageExt = ".ysvp";
 
 
 
@@ -28,6 +40,7 @@ namespace VirtualPlayerSetting
 
 		private void FrmMain_FormClosed( object sender, FormClosedEventArgs e )
 		{
+			PbIcon.Image = null;
 			Directory.Delete( PathMgr.TempPath, true );
 		}
 
@@ -37,16 +50,46 @@ namespace VirtualPlayerSetting
 
 		void ViewAllClear()
 		{
-			PbIcon.Image = null;
+			TbName.Clear();
+
+			ClearIcon();
 		}
 
+
+		void ClearIcon()
+		{
+			if( PbIcon.Image != null )
+			{
+				PbIcon.Image.Dispose();
+				PbIcon.Image = null;
+			}
+		}
+
+
+		void UpdateIcon()
+		{
+			string imgPath = Path.Combine( PathMgr.TempPath, IconFileName );
+			PbIcon.Image = Image.FromFile( imgPath );
+		}
+
+		void UpdateSound()
+		{
+			LbSounds.Items.Clear();
+
+			string[] files = Directory.GetFiles( PathMgr.SoundPath );
+
+			foreach( string file in files )
+			{
+				LbSounds.Items.Add( Path.GetFileName( file ) );
+			}
+		}
 
 
 		private void BtnLoad_Click( object sender, EventArgs e )
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
-				Filter = "Virtual Player File|*.ysvp",
+				Filter = $"Virtual Player File|*{PackageExt}",
 				InitialDirectory = PathMgr.VPlayerPath
 
 			};
@@ -69,10 +112,11 @@ namespace VirtualPlayerSetting
 					Directory.Delete( PathMgr.TempPath, true );
 					ZipFile.ExtractToDirectory( zipPath, PathMgr.TempPath );
 
-					// PNG画像をPictureBoxに表示
-					string imgPath = Path.Combine( PathMgr.TempPath, IconFileName );
-					PbIcon.Image = Image.FromFile( imgPath );
+					// UI更新
+					TbName.Text = Path.GetFileNameWithoutExtension( zipPath );
 
+					UpdateIcon();
+					UpdateSound();
 				}
 
 			}
@@ -89,7 +133,7 @@ namespace VirtualPlayerSetting
 					return;
 				}
 
-				string packagePath = Path.Combine( PathMgr.VPlayerPath, TbName.Text + ".ysvp" );
+				string packagePath = Path.Combine( PathMgr.VPlayerPath, TbName.Text + PackageExt );
 
 				if( File.Exists( packagePath ) )
 				{
@@ -98,9 +142,20 @@ namespace VirtualPlayerSetting
 					var ret = MessageBox.Show( message, "Warning", MessageBoxButtons.YesNo );
 
 					if( ret != DialogResult.Yes ) return;
+
+					string backupPath = packagePath + "_backup";
+
+					// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
+					ZipFile.CreateFromDirectory( PathMgr.TempPath, backupPath );
+					File.Delete( packagePath );
+					File.Move( backupPath, packagePath );
+				}
+				else
+				{
+					ZipFile.CreateFromDirectory( PathMgr.TempPath, packagePath );
 				}
 
-				ZipFile.CreateFromDirectory( PathMgr.TempPath, packagePath );
+
 
 				MessageBox.Show( "Success!" );
 			}
@@ -125,8 +180,6 @@ namespace VirtualPlayerSetting
 
 			if( result == DialogResult.OK )
 			{
-				MessageBox.Show( ofd.FileName );
-
 				string srcImgPath = ofd.FileName;
 				string destImgPath = Path.Combine( PathMgr.TempPath, IconFileName );
 
@@ -145,11 +198,26 @@ namespace VirtualPlayerSetting
 							graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 							graphics.DrawImage( inputImage, 0, 0, w, h );
 
-							// リサイズされた画像をPNG形式で保存
-							resizedImage.Save( destImgPath, ImageFormat.Png );
 
-							// PNG画像をPictureBoxに表示
-							PbIcon.Image = Image.FromFile( destImgPath );
+							// リサイズされた画像をPNG形式で保存
+							if( File.Exists( destImgPath ) )
+							{
+								string backupPath = destImgPath + "_backup";
+
+								// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
+								resizedImage.Save( backupPath, ImageFormat.Png );
+								ClearIcon();
+								File.Delete( destImgPath );
+								File.Move( backupPath, destImgPath );
+							}
+							else
+							{
+								resizedImage.Save( destImgPath, ImageFormat.Png );
+							}
+
+							// アイコン更新
+							UpdateIcon();
+
 						}
 					}
 				}
@@ -173,21 +241,73 @@ namespace VirtualPlayerSetting
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
-				Filter = "Sound File|*.wav;*.mp3;*.ogg"
+				//				Filter = "Sound File|*.wav;*.mp3;"
+				Filter = "File|*.*",
+				Multiselect = true,
 			};
 
 			var result = ofd.ShowDialog();
 
 			if( result == DialogResult.OK )
 			{
-				MessageBox.Show( ofd.FileName );
+
+				foreach( var item in ofd.FileNames )
+				{
+					string fileName = Path.GetFileName( item );
+					LbSounds.Items.Add( fileName );
+
+					string soundPath = Path.Combine( PathMgr.SoundPath, fileName );
+					File.Copy( item, soundPath, true );
+				}
 			}
 		}
 
 		private void BtnSoundDel_Click( object sender, EventArgs e )
 		{
+		}
+
+		private void TbName_KeyPress( object sender, KeyPressEventArgs e )
+		{
+			var tb = (System.Windows.Forms.TextBox)sender;
+
+			string inputText = tb.Text + e.KeyChar;
+			if( !Regex.IsMatch( inputText, "^[a-zA-Z0-9!@#$%&()\\-_+]*$" ) && e.KeyChar != (char)Keys.Back )
+			{
+				e.Handled = true; // 非英語の文字を無効にする
+			}
+		}
+
+
+
+		void PlaySound( ListBox lb )
+		{
+			string soundName = lb.SelectedItem.ToString()!;
+			string soundPath = Path.Combine( PathMgr.SoundPath, soundName );
+
+			if( File.Exists( soundPath ) == false )
+			{
+				MessageBox.Show( "対象の音声が存在しません。" );
+				return;
+			}
+
+			SoundPlayClient.SoundLocation = soundPath;
+			SoundPlayClient.Play();
 
 		}
+
+
+		private void BtnSoundPlay_Click( object sender, EventArgs e )
+		{
+			PlaySound( LbSounds );
+		}
+
+
+		private void LbSounds_DoubleClick( object sender, EventArgs e )
+		{
+			PlaySound( LbSounds );
+		}
+
+
 
 	}
 }
