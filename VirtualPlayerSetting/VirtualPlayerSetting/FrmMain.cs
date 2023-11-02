@@ -46,7 +46,7 @@ namespace VirtualPlayerSetting
 
 			string json = JsonSerializer.Serialize( sysParam, options );
 
-			string jsonPath = Path.Combine( PathMgr.ParameterPath, "SystemParam.json" );
+			string jsonPath = Path.Combine( PathMgr.Parameter, "SystemParam.json" );
 
 			File.WriteAllText( jsonPath, json );
 
@@ -62,14 +62,14 @@ namespace VirtualPlayerSetting
 
 		private void Form1_Load( object sender, EventArgs e )
 		{
-			Directory.Delete( PathMgr.TempPath, true );
+			Directory.Delete( PathMgr.Temp, true );
 		}
 
 
 		private void FrmMain_FormClosed( object sender, FormClosedEventArgs e )
 		{
-			PbIcon.Image = null;
-			Directory.Delete( PathMgr.TempPath, true );
+			ViewAllClear();
+			Directory.Delete( PathMgr.Temp, true );
 		}
 
 
@@ -96,7 +96,7 @@ namespace VirtualPlayerSetting
 
 		void UpdateIcon()
 		{
-			string imgPath = Path.Combine( PathMgr.TempPath, IconFileName );
+			string imgPath = Path.Combine( PathMgr.Temp, IconFileName );
 			PbIcon.Image = Image.FromFile( imgPath );
 		}
 
@@ -104,7 +104,7 @@ namespace VirtualPlayerSetting
 		{
 			LbSounds.Items.Clear();
 
-			string[] files = Directory.GetFiles( PathMgr.SoundPath );
+			string[] files = Directory.GetFiles( PathMgr.TempSound );
 
 			foreach( string file in files )
 			{
@@ -118,8 +118,7 @@ namespace VirtualPlayerSetting
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
 				Filter = $"Virtual Player File|*{PackageExt}",
-				InitialDirectory = PathMgr.VPlayerPath
-
+				InitialDirectory = PathMgr.VPlayer
 			};
 
 			var result = ofd.ShowDialog();
@@ -137,8 +136,8 @@ namespace VirtualPlayerSetting
 						Debug.WriteLine( entry );
 					}
 
-					Directory.Delete( PathMgr.TempPath, true );
-					ZipFile.ExtractToDirectory( zipPath, PathMgr.TempPath );
+					Directory.Delete( PathMgr.Temp, true );
+					ZipFile.ExtractToDirectory( zipPath, PathMgr.Temp );
 
 					// UI更新
 					TbName.Text = Path.GetFileNameWithoutExtension( zipPath );
@@ -161,7 +160,7 @@ namespace VirtualPlayerSetting
 					return;
 				}
 
-				string packagePath = Path.Combine( PathMgr.VPlayerPath, TbName.Text + PackageExt );
+				string packagePath = Path.Combine( PathMgr.VPlayer, TbName.Text + PackageExt );
 
 				if( File.Exists( packagePath ) )
 				{
@@ -174,13 +173,13 @@ namespace VirtualPlayerSetting
 					string backupPath = packagePath + "_backup";
 
 					// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
-					ZipFile.CreateFromDirectory( PathMgr.TempPath, backupPath );
+					ZipFile.CreateFromDirectory( PathMgr.Temp, backupPath );
 					File.Delete( packagePath );
 					File.Move( backupPath, packagePath );
 				}
 				else
 				{
-					ZipFile.CreateFromDirectory( PathMgr.TempPath, packagePath );
+					ZipFile.CreateFromDirectory( PathMgr.Temp, packagePath );
 				}
 
 
@@ -209,7 +208,7 @@ namespace VirtualPlayerSetting
 			if( result == DialogResult.OK )
 			{
 				string srcImgPath = ofd.FileName;
-				string destImgPath = Path.Combine( PathMgr.TempPath, IconFileName );
+				string destImgPath = Path.Combine( PathMgr.Temp, IconFileName );
 
 				try
 				{
@@ -284,7 +283,7 @@ namespace VirtualPlayerSetting
 					string fileName = Path.GetFileName( item );
 					LbSounds.Items.Add( fileName );
 
-					string soundPath = Path.Combine( PathMgr.SoundPath, fileName );
+					string soundPath = Path.Combine( PathMgr.TempSound, fileName );
 					File.Copy( item, soundPath, true );
 				}
 			}
@@ -292,7 +291,32 @@ namespace VirtualPlayerSetting
 
 		private void BtnSoundDel_Click( object sender, EventArgs e )
 		{
+			ListRemove( LbSounds, PathMgr.TempSound );
 		}
+
+
+		private void ListRemove( ListBox lb, string dataDirPath )
+		{
+			if( lb.SelectedIndex != -1 )
+			{
+				string[] files = Directory.GetFiles( dataDirPath );
+				string delFileName = lb.SelectedItem.ToString()!;
+
+				foreach( string file in files )
+				{
+					if( file.Contains( delFileName ) )
+					{
+						File.Delete( file );
+						break;
+					}
+				}
+
+				lb.Items.RemoveAt( lb.SelectedIndex );
+			}
+		}
+
+
+
 
 		private void TbName_KeyPress( object sender, KeyPressEventArgs e )
 		{
@@ -310,7 +334,7 @@ namespace VirtualPlayerSetting
 		void PlaySound( ListBox lb )
 		{
 			string soundName = lb.SelectedItem.ToString()!;
-			string soundPath = Path.Combine( PathMgr.SoundPath, soundName );
+			string soundPath = Path.Combine( PathMgr.TempSound, soundName );
 
 			if( File.Exists( soundPath ) == false )
 			{

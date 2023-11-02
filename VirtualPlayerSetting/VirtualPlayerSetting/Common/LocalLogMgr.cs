@@ -30,7 +30,7 @@ namespace MLib
 		private static string CreateFilePath()
 		{
 			var dt = DateTime.Now.ToString( "yyyyMMdd" );
-			return $"{PathMgr.LogPath}/{dt}.log";
+			return $"{PathMgr.Log}/{dt}.log";
 		}
 
 	}

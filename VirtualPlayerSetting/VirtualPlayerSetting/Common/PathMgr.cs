@@ -13,7 +13,7 @@ namespace MLib
 		/// <summary>
 		/// 実行フォルダパス
 		/// </summary>
-		public static string AppPath
+		public static string AppDir
 		{
 			// System.Reflection.Assembly.GetExecutingAssembly().Locationは、
 			// .Netで単一ファイル出力するとnullになるので廃止
@@ -23,41 +23,41 @@ namespace MLib
 		/// <summary>
 		/// ログフォルダパス
 		/// </summary>
-		public static string LogPath
+		public static string Log
 		{
-			get { return GetAndCreateDirectoryPath( AppPath, "Log" ); }
+			get { return GetAndCreateDirectoryPath( AppDir, "Log" ); }
 		}
 
 		/// <summary>
 		/// 一時フォルダパス
 		/// </summary>
-		public static string TempPath
+		public static string Temp
 		{
-			get { return GetAndCreateDirectoryPath( AppPath, "Temp" ); }
+			get { return GetAndCreateDirectoryPath( AppDir, "Temp" ); }
 		}
 
 		/// <summary>
 		/// 音声フォルダパス
 		/// </summary>
-		public static string SoundPath
+		public static string TempSound
 		{
-			get { return GetAndCreateDirectoryPath( TempPath, "Sound" ); }
+			get { return GetAndCreateDirectoryPath( Temp, "Sound" ); }
 		}
 
 		/// <summary>
 		/// パラメータフォルダパス
 		/// </summary>
-		public static string ParameterPath
+		public static string Parameter
 		{
-			get { return GetAndCreateDirectoryPath( AppPath, "Parameter" ); }
+			get { return GetAndCreateDirectoryPath( AppDir, "Parameter" ); }
 		}
 
 		/// <summary>
 		/// パッケージパス
 		/// </summary>
-		public static string VPlayerPath
+		public static string VPlayer
 		{
-			get { return GetAndCreateDirectoryPath( AppPath, "VPlayer" ); }
+			get { return GetAndCreateDirectoryPath( AppDir, "VPlayer" ); }
 		}
 
 
