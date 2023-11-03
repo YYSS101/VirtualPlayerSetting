@@ -6,3 +6,9 @@
 /VirtualPlayerSetting/.vs/VirtualPlayerSetting
 /VirtualPlayerSetting/VirtualPlayerSetting/bin/Debug/net6.0-windows
 /VirtualPlayerSetting/VirtualPlayerSetting/obj
+/SampleDLL/bin
+/SampleDLL/obj
+/VirtualPlayerSetting/CppTest/x64/Debug
+/VirtualPlayerSetting/SampleConsole/obj
+/VirtualPlayerSetting/VirtualPlayerSetting/bin
+/VirtualPlayerSetting/x64/Debug
