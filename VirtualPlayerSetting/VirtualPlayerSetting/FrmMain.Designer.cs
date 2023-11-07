@@ -40,11 +40,11 @@
 			PbCutin = new PictureBox();
 			BtnCutinAdd = new Button();
 			BtnCutinDel = new Button();
-			button1 = new Button();
-			button2 = new Button();
-			button3 = new Button();
-			button4 = new Button();
-			button5 = new Button();
+			radioButton1 = new RadioButton();
+			radioButton2 = new RadioButton();
+			radioButton3 = new RadioButton();
+			radioButton4 = new RadioButton();
+			radioButton5 = new RadioButton();
 			( (System.ComponentModel.ISupportInitialize) PbIcon  ).BeginInit();
 			( (System.ComponentModel.ISupportInitialize) PbCutin  ).BeginInit();
 			SuspendLayout();
@@ -52,7 +52,7 @@
 			// PbIcon
 			// 
 			PbIcon.BorderStyle = BorderStyle.FixedSingle;
-			PbIcon.Location = new Point( 12, 91 );
+			PbIcon.Location = new Point( 12, 65 );
 			PbIcon.Name = "PbIcon";
 			PbIcon.Size = new Size( 128, 128 );
 			PbIcon.SizeMode = PictureBoxSizeMode.Zoom;
@@ -61,7 +61,7 @@
 			// 
 			// BtnIconAdd
 			// 
-			BtnIconAdd.Location = new Point( 12, 225 );
+			BtnIconAdd.Location = new Point( 12, 199 );
 			BtnIconAdd.Name = "BtnIconAdd";
 			BtnIconAdd.Size = new Size( 75, 23 );
 			BtnIconAdd.TabIndex = 1;
@@ -73,7 +73,7 @@
 			// 
 			LbSounds.FormattingEnabled = true;
 			LbSounds.ItemHeight = 15;
-			LbSounds.Location = new Point( 163, 141 );
+			LbSounds.Location = new Point( 163, 92 );
 			LbSounds.Name = "LbSounds";
 			LbSounds.Size = new Size( 399, 184 );
 			LbSounds.TabIndex = 2;
@@ -81,7 +81,7 @@
 			// 
 			// BtnSoundAdd
 			// 
-			BtnSoundAdd.Location = new Point( 163, 331 );
+			BtnSoundAdd.Location = new Point( 163, 282 );
 			BtnSoundAdd.Name = "BtnSoundAdd";
 			BtnSoundAdd.Size = new Size( 75, 23 );
 			BtnSoundAdd.TabIndex = 1;
@@ -91,7 +91,7 @@
 			// 
 			// BtnSoundDel
 			// 
-			BtnSoundDel.Location = new Point( 244, 331 );
+			BtnSoundDel.Location = new Point( 244, 282 );
 			BtnSoundDel.Name = "BtnSoundDel";
 			BtnSoundDel.Size = new Size( 47, 23 );
 			BtnSoundDel.TabIndex = 1;
@@ -112,7 +112,7 @@
 			// BtnSave
 			// 
 			BtnSave.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Right  ;
-			BtnSave.Location = new Point( 488, 413 );
+			BtnSave.Location = new Point( 485, 384 );
 			BtnSave.Name = "BtnSave";
 			BtnSave.Size = new Size( 75, 23 );
 			BtnSave.TabIndex = 1;
@@ -122,15 +122,15 @@
 			// 
 			// TbName
 			// 
-			TbName.Location = new Point( 12, 62 );
+			TbName.Location = new Point( 163, 13 );
 			TbName.Name = "TbName";
-			TbName.Size = new Size( 392, 23 );
+			TbName.Size = new Size( 400, 23 );
 			TbName.TabIndex = 3;
 			TbName.KeyPress += TbName_KeyPress;
 			// 
 			// BtnSoundPlay
 			// 
-			BtnSoundPlay.Location = new Point( 488, 331 );
+			BtnSoundPlay.Location = new Point( 488, 282 );
 			BtnSoundPlay.Name = "BtnSoundPlay";
 			BtnSoundPlay.Size = new Size( 75, 23 );
 			BtnSoundPlay.TabIndex = 1;
@@ -167,66 +167,73 @@
 			BtnCutinDel.Text = "Del";
 			BtnCutinDel.UseVisualStyleBackColor = true;
 			// 
-			// button1
+			// radioButton1
 			// 
-			button1.BackColor = Color.LightBlue;
-			button1.Location = new Point( 163, 112 );
-			button1.Name = "button1";
-			button1.Size = new Size( 75, 23 );
-			button1.TabIndex = 1;
-			button1.Text = "Startup";
-			button1.UseVisualStyleBackColor = false;
-			button1.Click += BtnSoundAdd_Click;
+			radioButton1.Appearance = Appearance.Button;
+			radioButton1.Checked = true;
+			radioButton1.Location = new Point( 163, 62 );
+			radioButton1.Name = "radioButton1";
+			radioButton1.Size = new Size( 55, 24 );
+			radioButton1.TabIndex = 5;
+			radioButton1.TabStop = true;
+			radioButton1.Text = "Startup";
+			radioButton1.TextAlign = ContentAlignment.MiddleCenter;
+			radioButton1.UseVisualStyleBackColor = true;
 			// 
-			// button2
+			// radioButton2
 			// 
-			button2.BackColor = Color.LightBlue;
-			button2.Location = new Point( 244, 112 );
-			button2.Name = "button2";
-			button2.Size = new Size( 75, 23 );
-			button2.TabIndex = 1;
-			button2.Text = "Attack";
-			button2.UseVisualStyleBackColor = false;
-			button2.Click += BtnSoundAdd_Click;
+			radioButton2.Appearance = Appearance.Button;
+			radioButton2.Location = new Point( 224, 62 );
+			radioButton2.Name = "radioButton2";
+			radioButton2.Size = new Size( 55, 25 );
+			radioButton2.TabIndex = 5;
+			radioButton2.Text = "Attack";
+			radioButton2.TextAlign = ContentAlignment.MiddleCenter;
+			radioButton2.UseVisualStyleBackColor = true;
 			// 
-			// button3
+			// radioButton3
 			// 
-			button3.BackColor = Color.LightBlue;
-			button3.Location = new Point( 325, 112 );
-			button3.Name = "button3";
-			button3.Size = new Size( 75, 23 );
-			button3.TabIndex = 1;
-			button3.Text = "Skill";
-			button3.UseVisualStyleBackColor = false;
-			button3.Click += BtnSoundAdd_Click;
+			radioButton3.Appearance = Appearance.Button;
+			radioButton3.Location = new Point( 285, 62 );
+			radioButton3.Name = "radioButton3";
+			radioButton3.Size = new Size( 55, 25 );
+			radioButton3.TabIndex = 5;
+			radioButton3.Text = "Skill";
+			radioButton3.TextAlign = ContentAlignment.MiddleCenter;
+			radioButton3.UseVisualStyleBackColor = true;
 			// 
-			// button4
+			// radioButton4
 			// 
-			button4.BackColor = Color.LightBlue;
-			button4.Location = new Point( 406, 112 );
-			button4.Name = "button4";
-			button4.Size = new Size( 75, 23 );
-			button4.TabIndex = 1;
-			button4.Text = "Die";
-			button4.UseVisualStyleBackColor = false;
-			button4.Click += BtnSoundAdd_Click;
+			radioButton4.Appearance = Appearance.Button;
+			radioButton4.Location = new Point( 346, 62 );
+			radioButton4.Name = "radioButton4";
+			radioButton4.Size = new Size( 55, 25 );
+			radioButton4.TabIndex = 5;
+			radioButton4.Text = "Die";
+			radioButton4.TextAlign = ContentAlignment.MiddleCenter;
+			radioButton4.UseVisualStyleBackColor = true;
 			// 
-			// button5
+			// radioButton5
 			// 
-			button5.BackColor = Color.LightBlue;
-			button5.Location = new Point( 487, 112 );
-			button5.Name = "button5";
-			button5.Size = new Size( 75, 23 );
-			button5.TabIndex = 1;
-			button5.Text = "Winner";
-			button5.UseVisualStyleBackColor = false;
-			button5.Click += BtnSoundAdd_Click;
+			radioButton5.Appearance = Appearance.Button;
+			radioButton5.Location = new Point( 407, 62 );
+			radioButton5.Name = "radioButton5";
+			radioButton5.Size = new Size( 55, 25 );
+			radioButton5.TabIndex = 5;
+			radioButton5.Text = "Win";
+			radioButton5.TextAlign = ContentAlignment.MiddleCenter;
+			radioButton5.UseVisualStyleBackColor = true;
 			// 
 			// FrmMain
 			// 
 			AutoScaleDimensions = new SizeF( 7F, 15F );
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size( 575, 448 );
+			ClientSize = new Size( 573, 419 );
+			Controls.Add( radioButton5 );
+			Controls.Add( radioButton4 );
+			Controls.Add( radioButton3 );
+			Controls.Add( radioButton2 );
+			Controls.Add( radioButton1 );
 			Controls.Add( PbCutin );
 			Controls.Add( TbName );
 			Controls.Add( LbSounds );
@@ -235,11 +242,6 @@
 			Controls.Add( BtnSave );
 			Controls.Add( BtnLoad );
 			Controls.Add( BtnSoundPlay );
-			Controls.Add( button5 );
-			Controls.Add( button4 );
-			Controls.Add( button3 );
-			Controls.Add( button2 );
-			Controls.Add( button1 );
 			Controls.Add( BtnSoundAdd );
 			Controls.Add( BtnCutinAdd );
 			Controls.Add( BtnIconAdd );
@@ -268,10 +270,10 @@
 		private PictureBox PbCutin;
 		private Button BtnCutinAdd;
 		private Button BtnCutinDel;
-		private Button button1;
-		private Button button2;
-		private Button button3;
-		private Button button4;
-		private Button button5;
+		private RadioButton radioButton1;
+		private RadioButton radioButton2;
+		private RadioButton radioButton3;
+		private RadioButton radioButton4;
+		private RadioButton radioButton5;
 	}
 }
