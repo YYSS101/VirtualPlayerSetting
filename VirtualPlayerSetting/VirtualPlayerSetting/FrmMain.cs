@@ -5,13 +5,14 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO.Compression;
 using System.Media;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using VirtualPlayerSetting.Common;
 using VirtualPlayerSetting.Model;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
+
 
 namespace VirtualPlayerSetting
 {
@@ -20,14 +21,7 @@ namespace VirtualPlayerSetting
 
 		SoundPlayer SoundPlayClient = new();
 
-
-		string IconFileName = "Icon.png";
-
-		string PackageExt = ".zip";     // テスト用拡張子
-																		//		string PackageExt = ".ysvp";
-
-
-
+		ParameterDefine TempDirDef = new( PathMgr.Temp );
 
 
 
@@ -96,7 +90,7 @@ namespace VirtualPlayerSetting
 
 		void UpdateIcon()
 		{
-			string imgPath = Path.Combine( PathMgr.Temp, IconFileName );
+			string imgPath = TempDirDef.IconPath;
 			PbIcon.Image = Image.FromFile( imgPath );
 		}
 
@@ -113,11 +107,13 @@ namespace VirtualPlayerSetting
 		}
 
 
+
+
+
 		private void BtnLoad_Click( object sender, EventArgs e )
 		{
-			OpenFileDialog ofd = new OpenFileDialog()
+			FolderBrowserDialog ofd = new()
 			{
-				Filter = $"Virtual Player File|*{PackageExt}",
 				InitialDirectory = PathMgr.VPlayer
 			};
 
@@ -127,24 +123,17 @@ namespace VirtualPlayerSetting
 			{
 				ViewAllClear();
 
-				string zipPath = ofd.FileName;
-
-				using( var archive = ZipFile.OpenRead( zipPath ) )
+				if( ParameterMgr.FileLoad( ofd.SelectedPath, TempDirDef ) == false )
 				{
-					foreach( var entry in archive.Entries )
-					{
-						Debug.WriteLine( entry );
-					}
-
-					Directory.Delete( PathMgr.Temp, true );
-					ZipFile.ExtractToDirectory( zipPath, PathMgr.Temp );
-
-					// UI更新
-					TbName.Text = Path.GetFileNameWithoutExtension( zipPath );
-
-					UpdateIcon();
-					UpdateSound();
+					return;
 				}
+
+				// UI更新
+				TbName.Text = Path.GetFileName( ofd.SelectedPath );
+
+
+				UpdateIcon();
+				UpdateSound();
 
 			}
 		}
@@ -160,29 +149,21 @@ namespace VirtualPlayerSetting
 					return;
 				}
 
-				string packagePath = Path.Combine( PathMgr.VPlayer, TbName.Text + PackageExt );
+				string destPath = Path.Combine( PathMgr.VPlayer, TbName.Text );
 
-				if( File.Exists( packagePath ) )
+				if( File.Exists( destPath ) )
 				{
 					string message = $"{TbName.Text} is already exists. override Ok ?";
 
 					var ret = MessageBox.Show( message, "Warning", MessageBoxButtons.YesNo );
 
 					if( ret != DialogResult.Yes ) return;
-
-					string backupPath = packagePath + "_backup";
-
-					// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
-					ZipFile.CreateFromDirectory( PathMgr.Temp, backupPath );
-					File.Delete( packagePath );
-					File.Move( backupPath, packagePath );
 				}
-				else
+
+				if( ParameterMgr.FileLoad( destPath, TempDirDef ) == false )
 				{
-					ZipFile.CreateFromDirectory( PathMgr.Temp, packagePath );
+					return;
 				}
-
-
 
 				MessageBox.Show( "Success!" );
 			}
@@ -208,7 +189,7 @@ namespace VirtualPlayerSetting
 			if( result == DialogResult.OK )
 			{
 				string srcImgPath = ofd.FileName;
-				string destImgPath = Path.Combine( PathMgr.Temp, IconFileName );
+				string destImgPath = TempDirDef.IconPath;
 
 				try
 				{
