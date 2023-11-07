@@ -21,7 +21,7 @@ namespace VirtualPlayerSetting
 
 		SoundPlayer SoundPlayClient = new();
 
-		ParameterDefine TempDirDef = new( PathMgr.Temp );
+		ParameterDefine TempDirDef = new( "" );
 
 
 
@@ -57,6 +57,7 @@ namespace VirtualPlayerSetting
 		private void Form1_Load( object sender, EventArgs e )
 		{
 			Directory.Delete( PathMgr.Temp, true );
+			TempDirDef = new( PathMgr.Temp );
 		}
 
 
@@ -86,12 +87,29 @@ namespace VirtualPlayerSetting
 				PbIcon.Image = null;
 			}
 		}
+		void ClearCutin()
+		{
+			if( PbCutin.Image != null )
+			{
+				PbCutin.Image.Dispose();
+				PbCutin.Image = null;
+			}
+		}
+
 
 
 		void UpdateIcon()
 		{
+			ClearIcon();
 			string imgPath = TempDirDef.IconPath;
 			PbIcon.Image = Image.FromFile( imgPath );
+		}
+
+		void UpdateCutin()
+		{
+			ClearCutin();
+			string imgPath = TempDirDef.CutinPath;
+			PbCutin.Image = Image.FromFile( imgPath );
 		}
 
 		void UpdateSound()
@@ -185,65 +203,74 @@ namespace VirtualPlayerSetting
 			};
 
 			var result = ofd.ShowDialog();
-
 			if( result == DialogResult.OK )
 			{
-				string srcImgPath = ofd.FileName;
-				string destImgPath = TempDirDef.IconPath;
-
-				try
-				{
-					// 画像をPNG形式に変換して保存
-					using( Image inputImage = Image.FromFile( srcImgPath ) )
-					{
-						int w = 128;
-						int h = 128;
-
-						using( Bitmap resizedImage = new Bitmap( w, h ) )
-						using( Graphics graphics = Graphics.FromImage( resizedImage ) )
-						{
-							// 画像をリサイズ
-							graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-							graphics.DrawImage( inputImage, 0, 0, w, h );
-
-
-							// リサイズされた画像をPNG形式で保存
-							if( File.Exists( destImgPath ) )
-							{
-								string backupPath = destImgPath + "_backup";
-
-								// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
-								resizedImage.Save( backupPath, ImageFormat.Png );
-								ClearIcon();
-								File.Delete( destImgPath );
-								File.Move( backupPath, destImgPath );
-							}
-							else
-							{
-								resizedImage.Save( destImgPath, ImageFormat.Png );
-							}
-
-							// アイコン更新
-							UpdateIcon();
-
-						}
-					}
-				}
-				catch( Exception ex )
-				{
-					MessageBox.Show( "非対応の画像形式です。" );
-
-					SimpleLog.WriteLine( $"src:{srcImgPath}, dest:{destImgPath}, {ex.Message}" );
-				}
-
+				ImageAdd( ofd.FileName, TempDirDef.IconPath, ParameterDefine.IconSize );
+				UpdateIcon();
 			}
-
 		}
 
-		private void BtnIconDel_Click( object sender, EventArgs e )
+
+		private void BtnCutinAdd_Click( object sender, EventArgs e )
 		{
+			OpenFileDialog ofd = new OpenFileDialog()
+			{
+				Filter = "Image File|*.jpg;*.png;*.gif"
+			};
 
+			var result = ofd.ShowDialog();
+			if( result == DialogResult.OK )
+			{
+				ImageAdd( ofd.FileName, TempDirDef.CutinPath, ParameterDefine.CutinSize );
+				UpdateCutin();
+			}
 		}
+
+
+
+		private void ImageAdd( string srcImgPath, string destImgPath, int imgSize )
+		{
+			try
+			{
+				// 画像をPNG形式に変換して保存
+				using Image inputImage = Image.FromFile( srcImgPath );
+				int w = imgSize;
+				int h = imgSize;
+
+				using Bitmap resizedImage = new Bitmap( w, h );
+				using Graphics graphics = Graphics.FromImage( resizedImage );
+
+				// 画像をリサイズ
+				graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				graphics.DrawImage( inputImage, 0, 0, w, h );
+
+				// リサイズされた画像をPNG形式で保存
+				if( File.Exists( destImgPath ) )
+				{
+					string backupPath = destImgPath + "_backup";
+
+					// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
+					resizedImage.Save( backupPath, ImageFormat.Png );
+					ClearIcon();
+					File.Delete( destImgPath );
+					File.Move( backupPath, destImgPath );
+				}
+				else
+				{
+					resizedImage.Save( destImgPath, ImageFormat.Png );
+				}
+			}
+			catch( Exception ex )
+			{
+				MessageBox.Show( "非対応の画像形式です。" );
+				SimpleLog.WriteLine( $"src:{srcImgPath}, dest:{destImgPath}, {ex.Message}" );
+			}
+		}
+
+
+
+
+
 
 		private void BtnSoundAdd_Click( object sender, EventArgs e )
 		{
@@ -339,7 +366,6 @@ namespace VirtualPlayerSetting
 		{
 			PlaySound( LbSounds );
 		}
-
 
 
 	}
