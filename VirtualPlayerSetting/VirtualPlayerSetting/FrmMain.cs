@@ -21,7 +21,7 @@ namespace VirtualPlayerSetting
 
 		SoundPlayer SoundPlayClient = new();
 
-		ParameterDefine TempDirDef = new( "" );
+		ParameterDefine TempDirDef;
 
 
 
@@ -116,7 +116,7 @@ namespace VirtualPlayerSetting
 		{
 			LbSounds.Items.Clear();
 
-			string[] files = Directory.GetFiles( PathMgr.TempSound );
+			string[] files = Directory.GetFiles( SelectingSoundPath );
 
 			foreach( string file in files )
 			{
@@ -267,6 +267,25 @@ namespace VirtualPlayerSetting
 			}
 		}
 
+
+
+
+		/// <summary>
+		/// Get directory path from selected radio button
+		/// </summary>
+		string SelectingSoundPath
+		{
+			get
+			{
+				if( Rb1.Checked ) return TempDirDef.OpeningSoundPath;
+				if( Rb2.Checked ) return TempDirDef.AttackSoundPath;
+				if( Rb3.Checked ) return TempDirDef.SkillSoundPath;
+				if( Rb4.Checked ) return TempDirDef.DieSoundPath;
+				if( Rb5.Checked ) return TempDirDef.WinSoundPath;
+
+				return "";
+			}
+		}
 
 
 

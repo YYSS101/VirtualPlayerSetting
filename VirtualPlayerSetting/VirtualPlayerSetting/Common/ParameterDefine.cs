@@ -19,22 +19,22 @@ namespace VirtualPlayerSetting.Common
 		public const int CutinSize = 256;
 
 
-		public const string StartupSoundDir = "01_SoundStartup";
+		public const string OpeningSoundDir = "01_SoundOpening";
 		public const string AttackSoundDir = "02_SoundAttack";
 		public const string SkillSoundDir = "03_SoundSkill";
 		public const string DieSoundDir = "04_SoundDie";
-		public const string WinnerSoundDir = "05_SoundWinner";
+		public const string WinSoundDir = "05_SoundWin";
 
 		// ----------------------------------------------------------------------------------------------------
 
 		public readonly string IconPath;
 		public readonly string CutinPath;
 
-		public readonly string StartupSoundPath;
+		public readonly string OpeningSoundPath;
 		public readonly string AttackSoundPath;
 		public readonly string SkillSoundPath;
 		public readonly string DieSoundPath;
-		public readonly string WinnerSoundPath;
+		public readonly string WinSoundPath;
 
 		// ----------------------------------------------------------------------------------------------------
 
@@ -43,11 +43,35 @@ namespace VirtualPlayerSetting.Common
 			IconPath = Path.Combine( baseDir, IconFileName );
 			CutinPath = Path.Combine( baseDir, CutinFileName );
 
-			StartupSoundPath = Path.Combine( baseDir, StartupSoundDir );
+			OpeningSoundPath = Path.Combine( baseDir, OpeningSoundDir );
 			AttackSoundPath = Path.Combine( baseDir, AttackSoundDir );
 			SkillSoundPath = Path.Combine( baseDir, SkillSoundDir );
 			DieSoundPath = Path.Combine( baseDir, DieSoundDir );
-			WinnerSoundPath = Path.Combine( baseDir, WinnerSoundDir );
+			WinSoundPath = Path.Combine( baseDir, WinSoundDir );
+		}
+
+		public void CreateDirectory()
+		{
+			if( Directory.Exists( OpeningSoundPath ) == false )
+			{
+				Directory.CreateDirectory( OpeningSoundPath );
+			}
+			if( Directory.Exists( AttackSoundPath ) == false )
+			{
+				Directory.CreateDirectory( AttackSoundPath );
+			}
+			if( Directory.Exists( SkillSoundPath ) == false )
+			{
+				Directory.CreateDirectory( SkillSoundPath );
+			}
+			if( Directory.Exists( DieSoundPath ) == false )
+			{
+				Directory.CreateDirectory( DieSoundPath );
+			}
+			if( Directory.Exists( WinSoundPath ) == false )
+			{
+				Directory.CreateDirectory( WinSoundPath );
+			}
 		}
 
 

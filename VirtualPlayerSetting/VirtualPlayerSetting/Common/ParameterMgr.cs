@@ -83,9 +83,9 @@ namespace VirtualPlayerSetting.Common
 
 
 			// Copy Sound File
-			if( Directory.Exists( srcDirDef.StartupSoundPath ) )
+			if( Directory.Exists( srcDirDef.OpeningSoundPath ) )
 			{
-				SoundDirCopy( srcDirDef.StartupSoundPath, tempDirDef.StartupSoundPath );
+				SoundDirCopy( srcDirDef.OpeningSoundPath, tempDirDef.OpeningSoundPath );
 			}
 			if( Directory.Exists( srcDirDef.AttackSoundPath ) )
 			{
@@ -99,9 +99,9 @@ namespace VirtualPlayerSetting.Common
 			{
 				SoundDirCopy( srcDirDef.DieSoundPath, tempDirDef.DieSoundPath );
 			}
-			if( Directory.Exists( srcDirDef.WinnerSoundPath ) )
+			if( Directory.Exists( srcDirDef.WinSoundPath ) )
 			{
-				SoundDirCopy( srcDirDef.WinnerSoundPath, tempDirDef.WinnerSoundPath );
+				SoundDirCopy( srcDirDef.WinSoundPath, tempDirDef.WinSoundPath );
 			}
 
 
@@ -133,9 +133,9 @@ namespace VirtualPlayerSetting.Common
 
 
 			// Copy Sound File
-			if( Directory.Exists( tempDirDef.StartupSoundPath ) )
+			if( Directory.Exists( tempDirDef.OpeningSoundPath ) )
 			{
-				SoundDirCopy( tempDirDef.StartupSoundPath, destDirDef.StartupSoundPath );
+				SoundDirCopy( tempDirDef.OpeningSoundPath, destDirDef.OpeningSoundPath );
 			}
 			if( Directory.Exists( tempDirDef.AttackSoundPath ) )
 			{
@@ -149,9 +149,9 @@ namespace VirtualPlayerSetting.Common
 			{
 				SoundDirCopy( tempDirDef.DieSoundPath, destDirDef.DieSoundPath );
 			}
-			if( Directory.Exists( tempDirDef.WinnerSoundPath ) )
+			if( Directory.Exists( tempDirDef.WinSoundPath ) )
 			{
-				SoundDirCopy( tempDirDef.WinnerSoundPath, destDirDef.WinnerSoundPath );
+				SoundDirCopy( tempDirDef.WinSoundPath, destDirDef.WinSoundPath );
 			}
 
 

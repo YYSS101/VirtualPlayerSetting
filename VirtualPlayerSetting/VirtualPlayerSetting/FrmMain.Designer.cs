@@ -40,11 +40,11 @@
 			PbCutin = new PictureBox();
 			BtnCutinAdd = new Button();
 			BtnCutinDel = new Button();
-			radioButton1 = new RadioButton();
-			radioButton2 = new RadioButton();
-			radioButton3 = new RadioButton();
-			radioButton4 = new RadioButton();
-			radioButton5 = new RadioButton();
+			Rb1 = new RadioButton();
+			Rb2 = new RadioButton();
+			Rb3 = new RadioButton();
+			Rb4 = new RadioButton();
+			Rb5 = new RadioButton();
 			( (System.ComponentModel.ISupportInitialize) PbIcon  ).BeginInit();
 			( (System.ComponentModel.ISupportInitialize) PbCutin  ).BeginInit();
 			SuspendLayout();
@@ -167,73 +167,73 @@
 			BtnCutinDel.Text = "Del";
 			BtnCutinDel.UseVisualStyleBackColor = true;
 			// 
-			// radioButton1
+			// Rb1
 			// 
-			radioButton1.Appearance = Appearance.Button;
-			radioButton1.Checked = true;
-			radioButton1.Location = new Point( 163, 62 );
-			radioButton1.Name = "radioButton1";
-			radioButton1.Size = new Size( 55, 24 );
-			radioButton1.TabIndex = 5;
-			radioButton1.TabStop = true;
-			radioButton1.Text = "Startup";
-			radioButton1.TextAlign = ContentAlignment.MiddleCenter;
-			radioButton1.UseVisualStyleBackColor = true;
+			Rb1.Appearance = Appearance.Button;
+			Rb1.Checked = true;
+			Rb1.Location = new Point( 163, 62 );
+			Rb1.Name = "Rb1";
+			Rb1.Size = new Size( 55, 24 );
+			Rb1.TabIndex = 5;
+			Rb1.TabStop = true;
+			Rb1.Text = "Startup";
+			Rb1.TextAlign = ContentAlignment.MiddleCenter;
+			Rb1.UseVisualStyleBackColor = true;
 			// 
-			// radioButton2
+			// Rb2
 			// 
-			radioButton2.Appearance = Appearance.Button;
-			radioButton2.Location = new Point( 224, 62 );
-			radioButton2.Name = "radioButton2";
-			radioButton2.Size = new Size( 55, 25 );
-			radioButton2.TabIndex = 5;
-			radioButton2.Text = "Attack";
-			radioButton2.TextAlign = ContentAlignment.MiddleCenter;
-			radioButton2.UseVisualStyleBackColor = true;
+			Rb2.Appearance = Appearance.Button;
+			Rb2.Location = new Point( 224, 62 );
+			Rb2.Name = "Rb2";
+			Rb2.Size = new Size( 55, 25 );
+			Rb2.TabIndex = 5;
+			Rb2.Text = "Attack";
+			Rb2.TextAlign = ContentAlignment.MiddleCenter;
+			Rb2.UseVisualStyleBackColor = true;
 			// 
-			// radioButton3
+			// Rb3
 			// 
-			radioButton3.Appearance = Appearance.Button;
-			radioButton3.Location = new Point( 285, 62 );
-			radioButton3.Name = "radioButton3";
-			radioButton3.Size = new Size( 55, 25 );
-			radioButton3.TabIndex = 5;
-			radioButton3.Text = "Skill";
-			radioButton3.TextAlign = ContentAlignment.MiddleCenter;
-			radioButton3.UseVisualStyleBackColor = true;
+			Rb3.Appearance = Appearance.Button;
+			Rb3.Location = new Point( 285, 62 );
+			Rb3.Name = "Rb3";
+			Rb3.Size = new Size( 55, 25 );
+			Rb3.TabIndex = 5;
+			Rb3.Text = "Skill";
+			Rb3.TextAlign = ContentAlignment.MiddleCenter;
+			Rb3.UseVisualStyleBackColor = true;
 			// 
-			// radioButton4
+			// Rb4
 			// 
-			radioButton4.Appearance = Appearance.Button;
-			radioButton4.Location = new Point( 346, 62 );
-			radioButton4.Name = "radioButton4";
-			radioButton4.Size = new Size( 55, 25 );
-			radioButton4.TabIndex = 5;
-			radioButton4.Text = "Die";
-			radioButton4.TextAlign = ContentAlignment.MiddleCenter;
-			radioButton4.UseVisualStyleBackColor = true;
+			Rb4.Appearance = Appearance.Button;
+			Rb4.Location = new Point( 346, 62 );
+			Rb4.Name = "Rb4";
+			Rb4.Size = new Size( 55, 25 );
+			Rb4.TabIndex = 5;
+			Rb4.Text = "Die";
+			Rb4.TextAlign = ContentAlignment.MiddleCenter;
+			Rb4.UseVisualStyleBackColor = true;
 			// 
-			// radioButton5
+			// Rb5
 			// 
-			radioButton5.Appearance = Appearance.Button;
-			radioButton5.Location = new Point( 407, 62 );
-			radioButton5.Name = "radioButton5";
-			radioButton5.Size = new Size( 55, 25 );
-			radioButton5.TabIndex = 5;
-			radioButton5.Text = "Win";
-			radioButton5.TextAlign = ContentAlignment.MiddleCenter;
-			radioButton5.UseVisualStyleBackColor = true;
+			Rb5.Appearance = Appearance.Button;
+			Rb5.Location = new Point( 407, 62 );
+			Rb5.Name = "Rb5";
+			Rb5.Size = new Size( 55, 25 );
+			Rb5.TabIndex = 5;
+			Rb5.Text = "Win";
+			Rb5.TextAlign = ContentAlignment.MiddleCenter;
+			Rb5.UseVisualStyleBackColor = true;
 			// 
 			// FrmMain
 			// 
 			AutoScaleDimensions = new SizeF( 7F, 15F );
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size( 573, 419 );
-			Controls.Add( radioButton5 );
-			Controls.Add( radioButton4 );
-			Controls.Add( radioButton3 );
-			Controls.Add( radioButton2 );
-			Controls.Add( radioButton1 );
+			Controls.Add( Rb5 );
+			Controls.Add( Rb4 );
+			Controls.Add( Rb3 );
+			Controls.Add( Rb2 );
+			Controls.Add( Rb1 );
 			Controls.Add( PbCutin );
 			Controls.Add( TbName );
 			Controls.Add( LbSounds );
@@ -270,10 +270,10 @@
 		private PictureBox PbCutin;
 		private Button BtnCutinAdd;
 		private Button BtnCutinDel;
-		private RadioButton radioButton1;
-		private RadioButton radioButton2;
-		private RadioButton radioButton3;
-		private RadioButton radioButton4;
-		private RadioButton radioButton5;
+		private RadioButton Rb1;
+		private RadioButton Rb2;
+		private RadioButton Rb3;
+		private RadioButton Rb4;
+		private RadioButton Rb5;
 	}
 }
