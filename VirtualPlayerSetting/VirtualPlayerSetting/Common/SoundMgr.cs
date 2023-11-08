@@ -1,9 +1,4 @@
 ﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VirtualPlayerSetting.Common
 {
@@ -13,12 +8,9 @@ namespace VirtualPlayerSetting.Common
 		WaveOut? WaveOut = null;
 
 
-
 		public void LoadSound( string soundFilePath )
 		{
-			// Nullなら開放される
-			WaveOut?.Dispose();
-			Reader?.Dispose();
+			DeleteSound();
 
 			Reader = new( soundFilePath );
 
@@ -27,20 +19,28 @@ namespace VirtualPlayerSetting.Common
 		}
 
 
+		public void DeleteSound()
+		{
+			// Nullじゃなければ開放される
+			WaveOut?.Stop();
+			WaveOut?.Dispose();
+			WaveOut = null;
+
+			Reader?.Dispose();
+			Reader = null;
+		}
+
+
 		public void Play()
 		{
-			if( WaveOut == null ) return;
-
-			WaveOut.Stop();
-			WaveOut.Play();
+			WaveOut?.Stop();
+			WaveOut?.Play();
 		}
 
 
 		public void Stop()
 		{
-			if( WaveOut == null ) return;
-
-			WaveOut.Stop();
+			WaveOut?.Stop();
 		}
 
 
