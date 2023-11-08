@@ -20,7 +20,7 @@ namespace VirtualPlayerSetting
 	public partial class FrmMain : Form
 	{
 
-		SoundPlayer SoundPlayClient = new();
+		SoundManager SoundMgr = new();
 
 		ParameterDefine TempDirDef = new( "", false );
 
@@ -65,6 +65,8 @@ namespace VirtualPlayerSetting
 		{
 			ViewAllClear();
 			TempDirInit();
+
+			SoundMgr.DeleteSound();
 		}
 
 
@@ -119,7 +121,7 @@ namespace VirtualPlayerSetting
 			PbCutin.Image = Image.FromFile( imgPath );
 		}
 
-		void UpdateSound()
+		void UpdateSoundList()
 		{
 			LbSounds.Items.Clear();
 
@@ -176,7 +178,7 @@ namespace VirtualPlayerSetting
 
 				UpdateIcon();
 				UpdateCutin();
-				UpdateSound();
+				UpdateSoundList();
 
 			}
 		}
@@ -326,7 +328,10 @@ namespace VirtualPlayerSetting
 		}
 
 
-
+		private void SoundSelect_CheckedChanged( object sender, EventArgs e )
+		{
+			UpdateSoundList();
+		}
 
 
 		private void BtnSoundAdd_Click( object sender, EventArgs e )
@@ -341,15 +346,13 @@ namespace VirtualPlayerSetting
 
 			if( result == DialogResult.OK )
 			{
-
 				foreach( var item in ofd.FileNames )
 				{
 					string fileName = Path.GetFileName( item );
-					LbSounds.Items.Add( fileName );
-
 					string soundPath = Path.Combine( SelectingSoundPath, fileName );
 					File.Copy( item, soundPath, true );
 				}
+				UpdateSoundList();
 			}
 		}
 
@@ -375,7 +378,7 @@ namespace VirtualPlayerSetting
 					}
 				}
 
-				lb.Items.RemoveAt( lb.SelectedIndex );
+				UpdateSoundList();
 			}
 		}
 
@@ -383,7 +386,6 @@ namespace VirtualPlayerSetting
 
 
 
-		SoundManager SoundMgr = new();
 
 		void PlaySound( ListBox lb )
 		{
@@ -418,11 +420,6 @@ namespace VirtualPlayerSetting
 			SoundMgr?.Stop();
 		}
 
-
-		private void SoundSelect_CheckedChanged( object sender, EventArgs e )
-		{
-			UpdateSound();
-		}
 
 
 	}
