@@ -67,7 +67,6 @@ namespace VirtualPlayerSetting
 		}
 
 
-		#region ã§í èàóù
 
 		void TempDirInit()
 		{
@@ -133,11 +132,6 @@ namespace VirtualPlayerSetting
 
 
 
-		#endregion
-
-
-
-		#region File Load/Save
 
 
 		private void BtnNew_Click( object sender, EventArgs e )
@@ -237,11 +231,6 @@ namespace VirtualPlayerSetting
 
 
 
-		#endregion
-
-
-		#region File Load/Save
-
 		private void BtnIconAdd_Click( object sender, EventArgs e )
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
@@ -317,10 +306,6 @@ namespace VirtualPlayerSetting
 
 
 
-		#endregion
-
-		#region File Load/Save
-
 
 		/// <summary>
 		/// Get directory path from selected radio button
@@ -347,7 +332,7 @@ namespace VirtualPlayerSetting
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
-				Filter = "Sound File|*.wav;*.mp3;",
+				Filter = "Sound File|*.wav;*.mp3;*.ogg",
 				Multiselect = true,
 			};
 
@@ -429,7 +414,6 @@ namespace VirtualPlayerSetting
 		}
 
 
-		#endregion
 
 
 	}
