@@ -37,14 +37,6 @@ namespace MLib
 		}
 
 		/// <summary>
-		/// 音声フォルダパス
-		/// </summary>
-		public static string TempSound
-		{
-			get { return GetAndCreateDirectoryPath( Temp, "Sound" ); }
-		}
-
-		/// <summary>
 		/// パラメータフォルダパス
 		/// </summary>
 		public static string Parameter

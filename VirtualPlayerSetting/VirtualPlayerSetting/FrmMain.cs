@@ -1,33 +1,28 @@
 using MLib;
+using NAudio.Wave;
 using System;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO.Compression;
 using System.Media;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using VirtualPlayerSetting.Common;
 using VirtualPlayerSetting.Model;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
+
 
 namespace VirtualPlayerSetting
 {
 	public partial class FrmMain : Form
 	{
 
-		SoundPlayer SoundPlayClient = new();
+		SoundManager SoundMgr = new();
 
-
-		string IconFileName = "Icon.png";
-
-		string PackageExt = ".zip";     // テスト用拡張子
-																		//		string PackageExt = ".ysvp";
-
-
-
+		ParameterDefine TempDirDef = new( "", false );
 
 
 
@@ -62,25 +57,34 @@ namespace VirtualPlayerSetting
 
 		private void Form1_Load( object sender, EventArgs e )
 		{
-			Directory.Delete( PathMgr.Temp, true );
+			TempDirInit();
 		}
 
 
 		private void FrmMain_FormClosed( object sender, FormClosedEventArgs e )
 		{
 			ViewAllClear();
-			Directory.Delete( PathMgr.Temp, true );
+			TempDirInit();
+
+			SoundMgr.DeleteSound();
 		}
 
 
 
-
+		void TempDirInit()
+		{
+			Directory.Delete( PathMgr.Temp, true );
+			TempDirDef = new( PathMgr.Temp );
+		}
 
 		void ViewAllClear()
 		{
 			TbName.Clear();
 
 			ClearIcon();
+			ClearCutin();
+			Rb1.Checked = true;
+			LbSounds.Items.Clear();
 		}
 
 
@@ -92,19 +96,36 @@ namespace VirtualPlayerSetting
 				PbIcon.Image = null;
 			}
 		}
+		void ClearCutin()
+		{
+			if( PbCutin.Image != null )
+			{
+				PbCutin.Image.Dispose();
+				PbCutin.Image = null;
+			}
+		}
+
 
 
 		void UpdateIcon()
 		{
-			string imgPath = Path.Combine( PathMgr.Temp, IconFileName );
+			ClearIcon();
+			string imgPath = TempDirDef.IconPath;
 			PbIcon.Image = Image.FromFile( imgPath );
 		}
 
-		void UpdateSound()
+		void UpdateCutin()
+		{
+			ClearCutin();
+			string imgPath = TempDirDef.CutinPath;
+			PbCutin.Image = Image.FromFile( imgPath );
+		}
+
+		void UpdateSoundList()
 		{
 			LbSounds.Items.Clear();
 
-			string[] files = Directory.GetFiles( PathMgr.TempSound );
+			string[] files = Directory.GetFiles( SelectingSoundPath );
 
 			foreach( string file in files )
 			{
@@ -113,11 +134,28 @@ namespace VirtualPlayerSetting
 		}
 
 
+
+
+
+		private void BtnNew_Click( object sender, EventArgs e )
+		{
+			if( TbName.Text != "" )
+			{
+				string mes = "Are you sure you want to be cleared?";
+				var ret = MessageBox.Show( mes );
+
+				if( ret != DialogResult.OK ) return;
+			}
+
+			ViewAllClear();
+			TempDirInit();
+		}
+
+
 		private void BtnLoad_Click( object sender, EventArgs e )
 		{
-			OpenFileDialog ofd = new OpenFileDialog()
+			FolderBrowserDialog ofd = new()
 			{
-				Filter = $"Virtual Player File|*{PackageExt}",
 				InitialDirectory = PathMgr.VPlayer
 			};
 
@@ -127,24 +165,20 @@ namespace VirtualPlayerSetting
 			{
 				ViewAllClear();
 
-				string zipPath = ofd.FileName;
+				TempDirInit();
 
-				using( var archive = ZipFile.OpenRead( zipPath ) )
+				if( ParameterMgr.FileLoad( ofd.SelectedPath, TempDirDef ) == false )
 				{
-					foreach( var entry in archive.Entries )
-					{
-						Debug.WriteLine( entry );
-					}
-
-					Directory.Delete( PathMgr.Temp, true );
-					ZipFile.ExtractToDirectory( zipPath, PathMgr.Temp );
-
-					// UI更新
-					TbName.Text = Path.GetFileNameWithoutExtension( zipPath );
-
-					UpdateIcon();
-					UpdateSound();
+					return;
 				}
+
+				// UI更新
+				TbName.Text = Path.GetFileName( ofd.SelectedPath );
+
+
+				UpdateIcon();
+				UpdateCutin();
+				UpdateSoundList();
 
 			}
 		}
@@ -160,29 +194,21 @@ namespace VirtualPlayerSetting
 					return;
 				}
 
-				string packagePath = Path.Combine( PathMgr.VPlayer, TbName.Text + PackageExt );
+				string destPath = Path.Combine( PathMgr.VPlayer, TbName.Text );
 
-				if( File.Exists( packagePath ) )
+				if( File.Exists( destPath ) )
 				{
 					string message = $"{TbName.Text} is already exists. override Ok ?";
 
 					var ret = MessageBox.Show( message, "Warning", MessageBoxButtons.YesNo );
 
 					if( ret != DialogResult.Yes ) return;
-
-					string backupPath = packagePath + "_backup";
-
-					// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
-					ZipFile.CreateFromDirectory( PathMgr.Temp, backupPath );
-					File.Delete( packagePath );
-					File.Move( backupPath, packagePath );
 				}
-				else
+
+				if( ParameterMgr.FileSave( destPath, TempDirDef ) == false )
 				{
-					ZipFile.CreateFromDirectory( PathMgr.Temp, packagePath );
+					return;
 				}
-
-
 
 				MessageBox.Show( "Success!" );
 			}
@@ -191,6 +217,18 @@ namespace VirtualPlayerSetting
 				MessageBox.Show( "Save Failed." );
 
 				SimpleLog.WriteLine( $"{ex.Message}" );
+			}
+		}
+
+
+		private void TbName_KeyPress( object sender, KeyPressEventArgs e )
+		{
+			var tb = (System.Windows.Forms.TextBox)sender;
+
+			string inputText = tb.Text + e.KeyChar;
+			if( !Regex.IsMatch( inputText, "^[a-zA-Z0-9!@#$%&()\\-_+]*$" ) && e.KeyChar != (char)Keys.Back )
+			{
+				e.Handled = true; // 非英語の文字を無効にする
 			}
 		}
 
@@ -204,72 +242,103 @@ namespace VirtualPlayerSetting
 			};
 
 			var result = ofd.ShowDialog();
-
 			if( result == DialogResult.OK )
 			{
-				string srcImgPath = ofd.FileName;
-				string destImgPath = Path.Combine( PathMgr.Temp, IconFileName );
-
-				try
-				{
-					// 画像をPNG形式に変換して保存
-					using( Image inputImage = Image.FromFile( srcImgPath ) )
-					{
-						int w = 128;
-						int h = 128;
-
-						using( Bitmap resizedImage = new Bitmap( w, h ) )
-						using( Graphics graphics = Graphics.FromImage( resizedImage ) )
-						{
-							// 画像をリサイズ
-							graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-							graphics.DrawImage( inputImage, 0, 0, w, h );
-
-
-							// リサイズされた画像をPNG形式で保存
-							if( File.Exists( destImgPath ) )
-							{
-								string backupPath = destImgPath + "_backup";
-
-								// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
-								resizedImage.Save( backupPath, ImageFormat.Png );
-								ClearIcon();
-								File.Delete( destImgPath );
-								File.Move( backupPath, destImgPath );
-							}
-							else
-							{
-								resizedImage.Save( destImgPath, ImageFormat.Png );
-							}
-
-							// アイコン更新
-							UpdateIcon();
-
-						}
-					}
-				}
-				catch( Exception ex )
-				{
-					MessageBox.Show( "非対応の画像形式です。" );
-
-					SimpleLog.WriteLine( $"src:{srcImgPath}, dest:{destImgPath}, {ex.Message}" );
-				}
-
+				ImageAdd( ofd.FileName, TempDirDef.IconPath, ParameterDefine.IconSize );
+				UpdateIcon();
 			}
-
 		}
 
-		private void BtnIconDel_Click( object sender, EventArgs e )
+
+		private void BtnCutinAdd_Click( object sender, EventArgs e )
 		{
+			OpenFileDialog ofd = new OpenFileDialog()
+			{
+				Filter = "Image File|*.jpg;*.png;*.gif"
+			};
 
+			var result = ofd.ShowDialog();
+			if( result == DialogResult.OK )
+			{
+				ImageAdd( ofd.FileName, TempDirDef.CutinPath, ParameterDefine.CutinSize );
+				UpdateCutin();
+			}
 		}
+
+
+
+		private void ImageAdd( string srcImgPath, string destImgPath, int imgSize )
+		{
+			try
+			{
+				// 画像をPNG形式に変換して保存
+				using Image inputImage = Image.FromFile( srcImgPath );
+				int w = imgSize;
+				int h = imgSize;
+
+				using Bitmap resizedImage = new Bitmap( w, h );
+				using Graphics graphics = Graphics.FromImage( resizedImage );
+
+				// 画像をリサイズ
+				graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				graphics.DrawImage( inputImage, 0, 0, w, h );
+
+				// リサイズされた画像をPNG形式で保存
+				if( File.Exists( destImgPath ) )
+				{
+					string backupPath = destImgPath + "_backup";
+
+					// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
+					resizedImage.Save( backupPath, ImageFormat.Png );
+					ClearIcon();
+					File.Delete( destImgPath );
+					File.Move( backupPath, destImgPath );
+				}
+				else
+				{
+					resizedImage.Save( destImgPath, ImageFormat.Png );
+				}
+			}
+			catch( Exception ex )
+			{
+				MessageBox.Show( "非対応の画像形式です。" );
+				SimpleLog.WriteLine( $"src:{srcImgPath}, dest:{destImgPath}, {ex.Message}" );
+			}
+		}
+
+
+
+
+
+		/// <summary>
+		/// Get directory path from selected radio button
+		/// </summary>
+		string SelectingSoundPath
+		{
+			get
+			{
+				if( Rb1.Checked ) return TempDirDef.OpeningSoundPath;
+				if( Rb2.Checked ) return TempDirDef.AttackSoundPath;
+				if( Rb3.Checked ) return TempDirDef.SkillSoundPath;
+				if( Rb4.Checked ) return TempDirDef.DieSoundPath;
+				if( Rb5.Checked ) return TempDirDef.WinSoundPath;
+
+				return "";
+			}
+		}
+
+
+		private void SoundSelect_CheckedChanged( object sender, EventArgs e )
+		{
+			UpdateSoundList();
+		}
+
 
 		private void BtnSoundAdd_Click( object sender, EventArgs e )
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
-				//				Filter = "Sound File|*.wav;*.mp3;"
-				Filter = "File|*.*",
+				Filter = "Sound File|*.wav;*.mp3;*.ogg",
 				Multiselect = true,
 			};
 
@@ -277,21 +346,19 @@ namespace VirtualPlayerSetting
 
 			if( result == DialogResult.OK )
 			{
-
 				foreach( var item in ofd.FileNames )
 				{
 					string fileName = Path.GetFileName( item );
-					LbSounds.Items.Add( fileName );
-
-					string soundPath = Path.Combine( PathMgr.TempSound, fileName );
+					string soundPath = Path.Combine( SelectingSoundPath, fileName );
 					File.Copy( item, soundPath, true );
 				}
+				UpdateSoundList();
 			}
 		}
 
 		private void BtnSoundDel_Click( object sender, EventArgs e )
 		{
-			ListRemove( LbSounds, PathMgr.TempSound );
+			ListRemove( LbSounds, SelectingSoundPath );
 		}
 
 
@@ -311,40 +378,28 @@ namespace VirtualPlayerSetting
 					}
 				}
 
-				lb.Items.RemoveAt( lb.SelectedIndex );
+				UpdateSoundList();
 			}
 		}
 
 
 
-
-		private void TbName_KeyPress( object sender, KeyPressEventArgs e )
-		{
-			var tb = (System.Windows.Forms.TextBox)sender;
-
-			string inputText = tb.Text + e.KeyChar;
-			if( !Regex.IsMatch( inputText, "^[a-zA-Z0-9!@#$%&()\\-_+]*$" ) && e.KeyChar != (char)Keys.Back )
-			{
-				e.Handled = true; // 非英語の文字を無効にする
-			}
-		}
 
 
 
 		void PlaySound( ListBox lb )
 		{
 			string soundName = lb.SelectedItem.ToString()!;
-			string soundPath = Path.Combine( PathMgr.TempSound, soundName );
+			string soundPath = Path.Combine( SelectingSoundPath, soundName );
 
 			if( File.Exists( soundPath ) == false )
 			{
-				MessageBox.Show( "対象の音声が存在しません。" );
+				MessageBox.Show( $"{soundName} is not found." );
 				return;
 			}
 
-			SoundPlayClient.SoundLocation = soundPath;
-			SoundPlayClient.Play();
-
+			SoundMgr.LoadSound( soundPath );
+			SoundMgr.Play();
 		}
 
 
@@ -357,6 +412,12 @@ namespace VirtualPlayerSetting
 		private void LbSounds_DoubleClick( object sender, EventArgs e )
 		{
 			PlaySound( LbSounds );
+		}
+
+
+		private void BtnSoundStop_Click( object sender, EventArgs e )
+		{
+			SoundMgr?.Stop();
 		}
 
 
