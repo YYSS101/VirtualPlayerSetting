@@ -1,10 +1,12 @@
-﻿using NAudio.Wave;
+﻿using NAudio.Vorbis;
+using NAudio.Wave;
 
 namespace VirtualPlayerSetting.Common
 {
 	internal class SoundManager
 	{
 		AudioFileReader? Reader = null;
+		VorbisWaveReader? VorbisRdr = null;
 		WaveOut? WaveOut = null;
 
 
@@ -12,10 +14,23 @@ namespace VirtualPlayerSetting.Common
 		{
 			DeleteSound();
 
-			Reader = new( soundFilePath );
+			string ext = Path.GetExtension( soundFilePath ).ToLower();
 
-			WaveOut = new();
-			WaveOut.Init( Reader );
+			// OGG
+			if( ext == ".ogg" )
+			{
+				VorbisRdr = new( soundFilePath );
+				WaveOut = new();
+				WaveOut.Init( VorbisRdr );
+			}
+			// MP3 / Wave
+			else
+			{
+				Reader = new( soundFilePath );
+				WaveOut = new();
+				WaveOut.Init( Reader );
+			}
+
 		}
 
 
@@ -28,6 +43,9 @@ namespace VirtualPlayerSetting.Common
 
 			Reader?.Dispose();
 			Reader = null;
+
+			VorbisRdr?.Dispose();
+			VorbisRdr = null;
 		}
 
 
