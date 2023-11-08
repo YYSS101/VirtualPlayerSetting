@@ -80,29 +80,12 @@ namespace VirtualPlayerSetting.Common
 				File.Copy( srcDirDef.CutinPath, tempDirDef.CutinPath, true );
 			}
 
-
 			// Copy Sound File
-			if( Directory.Exists( srcDirDef.OpeningSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.OpeningSoundPath, tempDirDef.OpeningSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.AttackSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.AttackSoundPath, tempDirDef.AttackSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.SkillSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.SkillSoundPath, tempDirDef.SkillSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.DieSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.DieSoundPath, tempDirDef.DieSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.WinSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.WinSoundPath, tempDirDef.WinSoundPath );
-			}
-
+			SoundDirCopy( srcDirDef.OpeningSoundPath, tempDirDef.OpeningSoundPath );
+			SoundDirCopy( srcDirDef.AttackSoundPath, tempDirDef.AttackSoundPath );
+			SoundDirCopy( srcDirDef.SkillSoundPath, tempDirDef.SkillSoundPath );
+			SoundDirCopy( srcDirDef.DieSoundPath, tempDirDef.DieSoundPath );
+			SoundDirCopy( srcDirDef.WinSoundPath, tempDirDef.WinSoundPath );
 
 			return true;
 		}

@@ -154,33 +154,29 @@ namespace VirtualPlayerSetting
 
 		private void BtnLoad_Click( object sender, EventArgs e )
 		{
-			FolderBrowserDialog ofd = new()
+			FrmSelectDir dialog = new();
+
+			var result = dialog.ShowDialog();
+
+			if( result != DialogResult.OK ) return;
+
+			string srcPath = dialog.SelectedPlayerDirPath;
+
+			if( ParameterMgr.FileLoad( srcPath, TempDirDef ) == false )
 			{
-				InitialDirectory = PathMgr.VPlayer
-			};
-
-			var result = ofd.ShowDialog();
-
-			if( result == DialogResult.OK )
-			{
-				ViewAllClear();
-
-				TempDirInit();
-
-				if( ParameterMgr.FileLoad( ofd.SelectedPath, TempDirDef ) == false )
-				{
-					return;
-				}
-
-				// UI更新
-				TbName.Text = Path.GetFileName( ofd.SelectedPath );
-
-
-				UpdateIcon();
-				UpdateCutin();
-				UpdateSoundList();
-
+				return;
 			}
+
+			string srcName = Path.GetDirectoryName( srcPath )!;
+
+			// UI更新
+			TbName.Text = Path.GetFileName( srcName );
+
+
+			UpdateIcon();
+			UpdateCutin();
+			UpdateSoundList();
+
 		}
 
 
