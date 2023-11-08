@@ -263,6 +263,9 @@
 			Controls.Add( BtnCutinAdd );
 			Controls.Add( BtnIconAdd );
 			Controls.Add( PbIcon );
+			FormBorderStyle = FormBorderStyle.FixedSingle;
+			MaximizeBox = false;
+			MinimizeBox = false;
 			Name = "FrmMain";
 			Text = "Form1";
 			FormClosed += FrmMain_FormClosed;

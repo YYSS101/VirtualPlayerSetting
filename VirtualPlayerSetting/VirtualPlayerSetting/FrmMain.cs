@@ -21,7 +21,7 @@ namespace VirtualPlayerSetting
 
 		SoundPlayer SoundPlayClient = new();
 
-		ParameterDefine TempDirDef;
+		ParameterDefine TempDirDef = new( "", false );
 
 
 
@@ -67,16 +67,13 @@ namespace VirtualPlayerSetting
 		}
 
 
+		#region ã§í èàóù
 
 		void TempDirInit()
 		{
 			Directory.Delete( PathMgr.Temp, true );
 			TempDirDef = new( PathMgr.Temp );
 		}
-
-
-
-
 
 		void ViewAllClear()
 		{
@@ -133,6 +130,14 @@ namespace VirtualPlayerSetting
 				LbSounds.Items.Add( Path.GetFileName( file ) );
 			}
 		}
+
+
+
+		#endregion
+
+
+
+		#region File Load/Save
 
 
 		private void BtnNew_Click( object sender, EventArgs e )
@@ -219,6 +224,23 @@ namespace VirtualPlayerSetting
 		}
 
 
+		private void TbName_KeyPress( object sender, KeyPressEventArgs e )
+		{
+			var tb = (System.Windows.Forms.TextBox)sender;
+
+			string inputText = tb.Text + e.KeyChar;
+			if( !Regex.IsMatch( inputText, "^[a-zA-Z0-9!@#$%&()\\-_+]*$" ) && e.KeyChar != (char)Keys.Back )
+			{
+				e.Handled = true; // îÒâpåÍÇÃï∂éöÇñ≥å¯Ç…Ç∑ÇÈ
+			}
+		}
+
+
+
+		#endregion
+
+
+		#region File Load/Save
 
 		private void BtnIconAdd_Click( object sender, EventArgs e )
 		{
@@ -295,6 +317,11 @@ namespace VirtualPlayerSetting
 
 
 
+		#endregion
+
+		#region File Load/Save
+
+
 		/// <summary>
 		/// Get directory path from selected radio button
 		/// </summary>
@@ -342,7 +369,7 @@ namespace VirtualPlayerSetting
 
 		private void BtnSoundDel_Click( object sender, EventArgs e )
 		{
-			ListRemove( LbSounds, PathMgr.TempSound );
+			ListRemove( LbSounds, SelectingSoundPath );
 		}
 
 
@@ -367,29 +394,14 @@ namespace VirtualPlayerSetting
 		}
 
 
-
-
-		private void TbName_KeyPress( object sender, KeyPressEventArgs e )
-		{
-			var tb = (System.Windows.Forms.TextBox)sender;
-
-			string inputText = tb.Text + e.KeyChar;
-			if( !Regex.IsMatch( inputText, "^[a-zA-Z0-9!@#$%&()\\-_+]*$" ) && e.KeyChar != (char)Keys.Back )
-			{
-				e.Handled = true; // îÒâpåÍÇÃï∂éöÇñ≥å¯Ç…Ç∑ÇÈ
-			}
-		}
-
-
-
 		void PlaySound( ListBox lb )
 		{
 			string soundName = lb.SelectedItem.ToString()!;
-			string soundPath = Path.Combine( PathMgr.TempSound, soundName );
+			string soundPath = Path.Combine( SelectingSoundPath, soundName );
 
 			if( File.Exists( soundPath ) == false )
 			{
-				MessageBox.Show( "ëŒè€ÇÃâπê∫Ç™ë∂ç›ÇµÇ‹ÇπÇÒÅB" );
+				MessageBox.Show( $"{soundName} is not found." );
 				return;
 			}
 
@@ -411,11 +423,13 @@ namespace VirtualPlayerSetting
 		}
 
 
-
 		private void SoundSelect_CheckedChanged( object sender, EventArgs e )
 		{
 			UpdateSound();
 		}
+
+
+		#endregion
 
 
 	}

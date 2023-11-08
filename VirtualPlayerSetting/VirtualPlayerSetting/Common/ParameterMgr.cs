@@ -15,6 +15,8 @@ namespace VirtualPlayerSetting.Common
 		/// </summary>
 		static void SoundDirCopy( string srcPath, string destPath )
 		{
+			if( Directory.Exists( srcPath ) == false ) return;
+
 			if( Directory.Exists( destPath ) == false )
 			{
 				Directory.CreateDirectory( destPath );
@@ -132,33 +134,18 @@ namespace VirtualPlayerSetting.Common
 
 
 				// Copy Sound File
-				if( Directory.Exists( tempDirDef.OpeningSoundPath ) )
-				{
-					SoundDirCopy( tempDirDef.OpeningSoundPath, destDirDef.OpeningSoundPath );
-				}
-				if( Directory.Exists( tempDirDef.AttackSoundPath ) )
-				{
-					SoundDirCopy( tempDirDef.AttackSoundPath, destDirDef.AttackSoundPath );
-				}
-				if( Directory.Exists( tempDirDef.SkillSoundPath ) )
-				{
-					SoundDirCopy( tempDirDef.SkillSoundPath, destDirDef.SkillSoundPath );
-				}
-				if( Directory.Exists( tempDirDef.DieSoundPath ) )
-				{
-					SoundDirCopy( tempDirDef.DieSoundPath, destDirDef.DieSoundPath );
-				}
-				if( Directory.Exists( tempDirDef.WinSoundPath ) )
-				{
-					SoundDirCopy( tempDirDef.WinSoundPath, destDirDef.WinSoundPath );
-				}
+				SoundDirCopy( tempDirDef.OpeningSoundPath, destDirDef.OpeningSoundPath );
+				SoundDirCopy( tempDirDef.AttackSoundPath, destDirDef.AttackSoundPath );
+				SoundDirCopy( tempDirDef.SkillSoundPath, destDirDef.SkillSoundPath );
+				SoundDirCopy( tempDirDef.DieSoundPath, destDirDef.DieSoundPath );
+				SoundDirCopy( tempDirDef.WinSoundPath, destDirDef.WinSoundPath );
 
 
 				// Delete and update old directory
 				Directory.Delete( destPath, true );
 				Directory.Move( backupPath, destPath );
 			}
-			catch ( Exception ex ) 
+			catch( Exception ex )
 			{
 				MessageBox.Show( ex.Message );
 			}
