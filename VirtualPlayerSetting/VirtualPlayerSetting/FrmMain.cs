@@ -56,15 +56,22 @@ namespace VirtualPlayerSetting
 
 		private void Form1_Load( object sender, EventArgs e )
 		{
-			Directory.Delete( PathMgr.Temp, true );
-			TempDirDef = new( PathMgr.Temp );
+			TempDirInit();
 		}
 
 
 		private void FrmMain_FormClosed( object sender, FormClosedEventArgs e )
 		{
 			ViewAllClear();
+			TempDirInit();
+		}
+
+
+
+		void TempDirInit()
+		{
 			Directory.Delete( PathMgr.Temp, true );
+			TempDirDef = new( PathMgr.Temp );
 		}
 
 
@@ -76,6 +83,9 @@ namespace VirtualPlayerSetting
 			TbName.Clear();
 
 			ClearIcon();
+			ClearCutin();
+			Rb1.Checked = true;
+			LbSounds.Items.Clear();
 		}
 
 
@@ -125,7 +135,19 @@ namespace VirtualPlayerSetting
 		}
 
 
+		private void BtnNew_Click( object sender, EventArgs e )
+		{
+			if( TbName.Text != "" )
+			{
+				string mes = "Are you sure you want to be cleared?";
+				var ret = MessageBox.Show( mes );
 
+				if( ret != DialogResult.OK ) return;
+			}
+
+			ViewAllClear();
+			TempDirInit();
+		}
 
 
 		private void BtnLoad_Click( object sender, EventArgs e )
@@ -141,6 +163,8 @@ namespace VirtualPlayerSetting
 			{
 				ViewAllClear();
 
+				TempDirInit();
+
 				if( ParameterMgr.FileLoad( ofd.SelectedPath, TempDirDef ) == false )
 				{
 					return;
@@ -151,6 +175,7 @@ namespace VirtualPlayerSetting
 
 
 				UpdateIcon();
+				UpdateCutin();
 				UpdateSound();
 
 			}
@@ -178,7 +203,7 @@ namespace VirtualPlayerSetting
 					if( ret != DialogResult.Yes ) return;
 				}
 
-				if( ParameterMgr.FileLoad( destPath, TempDirDef ) == false )
+				if( ParameterMgr.FileSave( destPath, TempDirDef ) == false )
 				{
 					return;
 				}
@@ -295,8 +320,7 @@ namespace VirtualPlayerSetting
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
-				//				Filter = "Sound File|*.wav;*.mp3;"
-				Filter = "File|*.*",
+				Filter = "Sound File|*.wav;*.mp3;",
 				Multiselect = true,
 			};
 
@@ -310,7 +334,7 @@ namespace VirtualPlayerSetting
 					string fileName = Path.GetFileName( item );
 					LbSounds.Items.Add( fileName );
 
-					string soundPath = Path.Combine( PathMgr.TempSound, fileName );
+					string soundPath = Path.Combine( SelectingSoundPath, fileName );
 					File.Copy( item, soundPath, true );
 				}
 			}
@@ -384,6 +408,13 @@ namespace VirtualPlayerSetting
 		private void LbSounds_DoubleClick( object sender, EventArgs e )
 		{
 			PlaySound( LbSounds );
+		}
+
+
+
+		private void SoundSelect_CheckedChanged( object sender, EventArgs e )
+		{
+			UpdateSound();
 		}
 
 

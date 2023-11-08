@@ -38,7 +38,7 @@ namespace VirtualPlayerSetting.Common
 
 		// ----------------------------------------------------------------------------------------------------
 
-		public ParameterDefine( string baseDir )
+		public ParameterDefine( string baseDir, bool createDir = true )
 		{
 			IconPath = Path.Combine( baseDir, IconFileName );
 			CutinPath = Path.Combine( baseDir, CutinFileName );
@@ -48,6 +48,11 @@ namespace VirtualPlayerSetting.Common
 			SkillSoundPath = Path.Combine( baseDir, SkillSoundDir );
 			DieSoundPath = Path.Combine( baseDir, DieSoundDir );
 			WinSoundPath = Path.Combine( baseDir, WinSoundDir );
+
+			if( createDir )
+			{
+				CreateDirectory();
+			}
 		}
 
 		public void CreateDirectory()

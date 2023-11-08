@@ -20,11 +20,11 @@ namespace VirtualPlayerSetting.Common
 				Directory.CreateDirectory( destPath );
 			}
 
-			foreach( var it in Directory.GetFiles( destPath ) )
+			foreach( var it in Directory.GetFiles( srcPath ) )
 			{
 				string ext = Path.GetExtension( it ).ToLower();
 
-				if( ext is "mp3" or "wav" or "ogg" )
+				if( ext is ".mp3" or ".wav" or ".ogg" )
 				{
 					string fileName = Path.GetFileName( it );
 					string destFilePath = Path.Combine( destPath, fileName );
@@ -36,10 +36,7 @@ namespace VirtualPlayerSetting.Common
 
 		static public bool FileLoad( string srcPath, ParameterDefine tempDirDef )
 		{
-			Directory.Delete( PathMgr.Temp, true );
-
 			ParameterDefine srcDirDef = new( srcPath );
-
 
 			// Copy Icon File
 			if( File.Exists( srcDirDef.IconPath ) == false )
@@ -111,54 +108,68 @@ namespace VirtualPlayerSetting.Common
 
 		static public bool FileSave( string destPath, ParameterDefine tempDirDef )
 		{
-
 			// Create backup
 			string backupPath = destPath + "_backup";
-			ParameterDefine destDirDef = new( backupPath );
 
-			// Copy Icon File
-			if( File.Exists( tempDirDef.IconPath ) == false )
+			try
 			{
-				MessageBox.Show( "Icon Data Not Found." );
-				return false;
+				ParameterDefine destDirDef = new( backupPath );
+
+				// Copy Icon File
+				if( File.Exists( tempDirDef.IconPath ) == false )
+				{
+					MessageBox.Show( "Icon Data Not Found." );
+					return false;
+				}
+				File.Copy( tempDirDef.IconPath, destDirDef.IconPath, true );
+
+
+				// Copy Cutin File
+				if( File.Exists( tempDirDef.CutinPath ) )
+				{
+					File.Copy( tempDirDef.CutinPath, destDirDef.CutinPath, true );
+				}
+
+
+				// Copy Sound File
+				if( Directory.Exists( tempDirDef.OpeningSoundPath ) )
+				{
+					SoundDirCopy( tempDirDef.OpeningSoundPath, destDirDef.OpeningSoundPath );
+				}
+				if( Directory.Exists( tempDirDef.AttackSoundPath ) )
+				{
+					SoundDirCopy( tempDirDef.AttackSoundPath, destDirDef.AttackSoundPath );
+				}
+				if( Directory.Exists( tempDirDef.SkillSoundPath ) )
+				{
+					SoundDirCopy( tempDirDef.SkillSoundPath, destDirDef.SkillSoundPath );
+				}
+				if( Directory.Exists( tempDirDef.DieSoundPath ) )
+				{
+					SoundDirCopy( tempDirDef.DieSoundPath, destDirDef.DieSoundPath );
+				}
+				if( Directory.Exists( tempDirDef.WinSoundPath ) )
+				{
+					SoundDirCopy( tempDirDef.WinSoundPath, destDirDef.WinSoundPath );
+				}
+
+
+				// Delete and update old directory
+				Directory.Delete( destPath, true );
+				Directory.Move( backupPath, destPath );
 			}
-			File.Copy( tempDirDef.IconPath, destDirDef.IconPath, true );
-
-
-			// Copy Cutin File
-			if( File.Exists( tempDirDef.CutinPath ) )
+			catch ( Exception ex ) 
 			{
-				File.Copy( tempDirDef.CutinPath, destDirDef.CutinPath, true );
+				MessageBox.Show( ex.Message );
 			}
-
-
-			// Copy Sound File
-			if( Directory.Exists( tempDirDef.OpeningSoundPath ) )
+			finally
 			{
-				SoundDirCopy( tempDirDef.OpeningSoundPath, destDirDef.OpeningSoundPath );
+				// Delete backup directory.
+				if( Directory.Exists( backupPath ) )
+				{
+					Directory.Delete( backupPath, true );
+				}
 			}
-			if( Directory.Exists( tempDirDef.AttackSoundPath ) )
-			{
-				SoundDirCopy( tempDirDef.AttackSoundPath, destDirDef.AttackSoundPath );
-			}
-			if( Directory.Exists( tempDirDef.SkillSoundPath ) )
-			{
-				SoundDirCopy( tempDirDef.SkillSoundPath, destDirDef.SkillSoundPath );
-			}
-			if( Directory.Exists( tempDirDef.DieSoundPath ) )
-			{
-				SoundDirCopy( tempDirDef.DieSoundPath, destDirDef.DieSoundPath );
-			}
-			if( Directory.Exists( tempDirDef.WinSoundPath ) )
-			{
-				SoundDirCopy( tempDirDef.WinSoundPath, destDirDef.WinSoundPath );
-			}
-
-
-			// Old Dir Delete and Update
-			Directory.Delete( destPath );
-			Directory.Move( backupPath, destPath );
-
 
 			return true;
 		}

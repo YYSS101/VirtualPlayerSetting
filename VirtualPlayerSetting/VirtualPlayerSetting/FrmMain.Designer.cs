@@ -45,6 +45,7 @@
 			Rb3 = new RadioButton();
 			Rb4 = new RadioButton();
 			Rb5 = new RadioButton();
+			BtnNew = new Button();
 			( (System.ComponentModel.ISupportInitialize) PbIcon  ).BeginInit();
 			( (System.ComponentModel.ISupportInitialize) PbCutin  ).BeginInit();
 			SuspendLayout();
@@ -101,7 +102,7 @@
 			// 
 			// BtnLoad
 			// 
-			BtnLoad.Location = new Point( 12, 12 );
+			BtnLoad.Location = new Point( 12, 36 );
 			BtnLoad.Name = "BtnLoad";
 			BtnLoad.Size = new Size( 128, 23 );
 			BtnLoad.TabIndex = 1;
@@ -122,7 +123,7 @@
 			// 
 			// TbName
 			// 
-			TbName.Location = new Point( 163, 13 );
+			TbName.Location = new Point( 162, 13 );
 			TbName.Name = "TbName";
 			TbName.Size = new Size( 400, 23 );
 			TbName.TabIndex = 3;
@@ -179,6 +180,7 @@
 			Rb1.Text = "Startup";
 			Rb1.TextAlign = ContentAlignment.MiddleCenter;
 			Rb1.UseVisualStyleBackColor = true;
+			Rb1.CheckedChanged += SoundSelect_CheckedChanged;
 			// 
 			// Rb2
 			// 
@@ -190,6 +192,7 @@
 			Rb2.Text = "Attack";
 			Rb2.TextAlign = ContentAlignment.MiddleCenter;
 			Rb2.UseVisualStyleBackColor = true;
+			Rb2.CheckedChanged += SoundSelect_CheckedChanged;
 			// 
 			// Rb3
 			// 
@@ -201,6 +204,7 @@
 			Rb3.Text = "Skill";
 			Rb3.TextAlign = ContentAlignment.MiddleCenter;
 			Rb3.UseVisualStyleBackColor = true;
+			Rb3.CheckedChanged += SoundSelect_CheckedChanged;
 			// 
 			// Rb4
 			// 
@@ -212,6 +216,7 @@
 			Rb4.Text = "Die";
 			Rb4.TextAlign = ContentAlignment.MiddleCenter;
 			Rb4.UseVisualStyleBackColor = true;
+			Rb4.CheckedChanged += SoundSelect_CheckedChanged;
 			// 
 			// Rb5
 			// 
@@ -223,6 +228,17 @@
 			Rb5.Text = "Win";
 			Rb5.TextAlign = ContentAlignment.MiddleCenter;
 			Rb5.UseVisualStyleBackColor = true;
+			Rb5.CheckedChanged += SoundSelect_CheckedChanged;
+			// 
+			// BtnNew
+			// 
+			BtnNew.Location = new Point( 12, 12 );
+			BtnNew.Name = "BtnNew";
+			BtnNew.Size = new Size( 128, 23 );
+			BtnNew.TabIndex = 1;
+			BtnNew.Text = "New";
+			BtnNew.UseVisualStyleBackColor = true;
+			BtnNew.Click += BtnNew_Click;
 			// 
 			// FrmMain
 			// 
@@ -240,6 +256,7 @@
 			Controls.Add( BtnCutinDel );
 			Controls.Add( BtnSoundDel );
 			Controls.Add( BtnSave );
+			Controls.Add( BtnNew );
 			Controls.Add( BtnLoad );
 			Controls.Add( BtnSoundPlay );
 			Controls.Add( BtnSoundAdd );
@@ -275,5 +292,6 @@
 		private RadioButton Rb3;
 		private RadioButton Rb4;
 		private RadioButton Rb5;
+		private Button BtnNew;
 	}
 }
