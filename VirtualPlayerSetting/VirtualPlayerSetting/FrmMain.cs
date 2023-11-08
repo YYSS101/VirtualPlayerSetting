@@ -1,4 +1,5 @@
 using MLib;
+using NAudio.Wave;
 using System;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
@@ -379,6 +380,11 @@ namespace VirtualPlayerSetting
 		}
 
 
+
+
+
+		SoundManager SoundMgr = new();
+
 		void PlaySound( ListBox lb )
 		{
 			string soundName = lb.SelectedItem.ToString()!;
@@ -390,9 +396,8 @@ namespace VirtualPlayerSetting
 				return;
 			}
 
-			SoundPlayClient.SoundLocation = soundPath;
-			SoundPlayClient.Play();
-
+			SoundMgr.LoadSound( soundPath );
+			SoundMgr.Play();
 		}
 
 
@@ -408,12 +413,16 @@ namespace VirtualPlayerSetting
 		}
 
 
+		private void BtnSoundStop_Click( object sender, EventArgs e )
+		{
+			SoundMgr?.Stop();
+		}
+
+
 		private void SoundSelect_CheckedChanged( object sender, EventArgs e )
 		{
 			UpdateSound();
 		}
-
-
 
 
 	}

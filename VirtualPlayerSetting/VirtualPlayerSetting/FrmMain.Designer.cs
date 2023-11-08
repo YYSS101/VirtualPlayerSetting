@@ -46,6 +46,7 @@
 			Rb4 = new RadioButton();
 			Rb5 = new RadioButton();
 			BtnNew = new Button();
+			BtnSoundStop = new Button();
 			( (System.ComponentModel.ISupportInitialize) PbIcon  ).BeginInit();
 			( (System.ComponentModel.ISupportInitialize) PbCutin  ).BeginInit();
 			SuspendLayout();
@@ -76,13 +77,13 @@
 			LbSounds.ItemHeight = 15;
 			LbSounds.Location = new Point( 163, 92 );
 			LbSounds.Name = "LbSounds";
-			LbSounds.Size = new Size( 399, 184 );
+			LbSounds.Size = new Size( 399, 244 );
 			LbSounds.TabIndex = 2;
 			LbSounds.DoubleClick += LbSounds_DoubleClick;
 			// 
 			// BtnSoundAdd
 			// 
-			BtnSoundAdd.Location = new Point( 163, 282 );
+			BtnSoundAdd.Location = new Point( 163, 342 );
 			BtnSoundAdd.Name = "BtnSoundAdd";
 			BtnSoundAdd.Size = new Size( 75, 23 );
 			BtnSoundAdd.TabIndex = 1;
@@ -92,7 +93,7 @@
 			// 
 			// BtnSoundDel
 			// 
-			BtnSoundDel.Location = new Point( 244, 282 );
+			BtnSoundDel.Location = new Point( 244, 342 );
 			BtnSoundDel.Name = "BtnSoundDel";
 			BtnSoundDel.Size = new Size( 47, 23 );
 			BtnSoundDel.TabIndex = 1;
@@ -113,7 +114,7 @@
 			// BtnSave
 			// 
 			BtnSave.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Right  ;
-			BtnSave.Location = new Point( 485, 384 );
+			BtnSave.Location = new Point( 488, 384 );
 			BtnSave.Name = "BtnSave";
 			BtnSave.Size = new Size( 75, 23 );
 			BtnSave.TabIndex = 1;
@@ -131,9 +132,9 @@
 			// 
 			// BtnSoundPlay
 			// 
-			BtnSoundPlay.Location = new Point( 488, 282 );
+			BtnSoundPlay.Location = new Point( 463, 342 );
 			BtnSoundPlay.Name = "BtnSoundPlay";
-			BtnSoundPlay.Size = new Size( 75, 23 );
+			BtnSoundPlay.Size = new Size( 47, 23 );
 			BtnSoundPlay.TabIndex = 1;
 			BtnSoundPlay.Text = "Play";
 			BtnSoundPlay.UseVisualStyleBackColor = true;
@@ -240,6 +241,16 @@
 			BtnNew.UseVisualStyleBackColor = true;
 			BtnNew.Click += BtnNew_Click;
 			// 
+			// BtnSoundStop
+			// 
+			BtnSoundStop.Location = new Point( 516, 342 );
+			BtnSoundStop.Name = "BtnSoundStop";
+			BtnSoundStop.Size = new Size( 47, 23 );
+			BtnSoundStop.TabIndex = 1;
+			BtnSoundStop.Text = "Stop";
+			BtnSoundStop.UseVisualStyleBackColor = true;
+			BtnSoundStop.Click += BtnSoundStop_Click;
+			// 
 			// FrmMain
 			// 
 			AutoScaleDimensions = new SizeF( 7F, 15F );
@@ -258,6 +269,7 @@
 			Controls.Add( BtnSave );
 			Controls.Add( BtnNew );
 			Controls.Add( BtnLoad );
+			Controls.Add( BtnSoundStop );
 			Controls.Add( BtnSoundPlay );
 			Controls.Add( BtnSoundAdd );
 			Controls.Add( BtnCutinAdd );
@@ -296,5 +308,6 @@
 		private RadioButton Rb4;
 		private RadioButton Rb5;
 		private Button BtnNew;
+		private Button BtnSoundStop;
 	}
 }

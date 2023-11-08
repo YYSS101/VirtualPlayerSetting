@@ -141,8 +141,11 @@ namespace VirtualPlayerSetting.Common
 				SoundDirCopy( tempDirDef.WinSoundPath, destDirDef.WinSoundPath );
 
 
-				// Delete and update old directory
-				Directory.Delete( destPath, true );
+				// フォルダが存在しないときにDeleteすると例外になるのでチェックする
+				if( Directory.Exists( destPath ) )
+				{
+					Directory.Delete( destPath, true );
+				}
 				Directory.Move( backupPath, destPath );
 			}
 			catch( Exception ex )
