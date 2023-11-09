@@ -61,35 +61,6 @@ namespace VirtualPlayerSetting
 
 
 		// ------------------------------------------------------------------------------------------------------------------------
-		/// <summary>
-		/// 外部ファイル読み込み
-		/// </summary>
-		private void BtnLoad_Click( object sender, EventArgs e )
-		{
-			FolderBrowserDialog ofd = new()
-			{
-				InitialDirectory = PathMgr.VPlayer,
-			};
-
-			var result = ofd.ShowDialog();
-
-			if( result != DialogResult.OK ) return;
-
-			// Copy to VPlayer dir.
-			string srcPath = ofd.SelectedPath;
-			string srcName = Path.GetFileName( srcPath )!;
-			string destPath = Path.Combine( PathMgr.VPlayer, srcName );
-
-			if( ParameterMgr.FileCheckCopy( srcPath, destPath ) == false )
-			{
-				return;
-			}
-
-			UpdatePlayerList();
-
-		}
-
-		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnDelete_Click( object sender, EventArgs e )
 		{
 			var name = LbPlayer.SelectedItem;

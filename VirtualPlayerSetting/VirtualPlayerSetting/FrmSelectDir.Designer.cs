@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
 			LbPlayer = new ListBox();
-			BtnLoad = new Button();
 			label1 = new Label();
 			BtnDelete = new Button();
 			BtnExport = new Button();
@@ -47,17 +46,6 @@
 			LbPlayer.Size = new Size( 368, 304 );
 			LbPlayer.TabIndex = 0;
 			LbPlayer.DoubleClick += LbPlayer_DoubleClick;
-			// 
-			// BtnLoad
-			// 
-			BtnLoad.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Left  ;
-			BtnLoad.Location = new Point( 12, 341 );
-			BtnLoad.Name = "BtnLoad";
-			BtnLoad.Size = new Size( 105, 31 );
-			BtnLoad.TabIndex = 1;
-			BtnLoad.Text = "Load External";
-			BtnLoad.UseVisualStyleBackColor = true;
-			BtnLoad.Click += BtnLoad_Click;
 			// 
 			// label1
 			// 
@@ -83,7 +71,7 @@
 			// BtnExport
 			// 
 			BtnExport.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Left  ;
-			BtnExport.Location = new Point( 123, 341 );
+			BtnExport.Location = new Point( 12, 341 );
 			BtnExport.Name = "BtnExport";
 			BtnExport.Size = new Size( 59, 31 );
 			BtnExport.TabIndex = 1;
@@ -94,7 +82,7 @@
 			// BtnImport
 			// 
 			BtnImport.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Left  ;
-			BtnImport.Location = new Point( 188, 341 );
+			BtnImport.Location = new Point( 77, 341 );
 			BtnImport.Name = "BtnImport";
 			BtnImport.Size = new Size( 59, 31 );
 			BtnImport.TabIndex = 1;
@@ -111,7 +99,6 @@
 			Controls.Add( BtnDelete );
 			Controls.Add( BtnImport );
 			Controls.Add( BtnExport );
-			Controls.Add( BtnLoad );
 			Controls.Add( LbPlayer );
 			MaximizeBox = false;
 			MinimizeBox = false;
@@ -126,7 +113,6 @@
 		#endregion
 
 		private ListBox LbPlayer;
-		private Button BtnLoad;
 		private Label label1;
 		private Button BtnDelete;
 		private Button BtnExport;
