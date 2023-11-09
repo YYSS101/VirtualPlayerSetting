@@ -10,6 +10,7 @@ namespace VirtualPlayerSetting.Common
 		WaveOut? WaveOut = null;
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		public void LoadSound( string soundFilePath )
 		{
 			DeleteSound();
@@ -34,6 +35,7 @@ namespace VirtualPlayerSetting.Common
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		public void DeleteSound()
 		{
 			// Nullじゃなければ開放される
@@ -49,6 +51,7 @@ namespace VirtualPlayerSetting.Common
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		public void Play()
 		{
 			WaveOut?.Stop();
@@ -56,6 +59,7 @@ namespace VirtualPlayerSetting.Common
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		public void Stop()
 		{
 			WaveOut?.Stop();

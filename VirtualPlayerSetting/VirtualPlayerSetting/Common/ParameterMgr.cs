@@ -10,6 +10,7 @@ namespace VirtualPlayerSetting.Common
 {
 	static internal class ParameterMgr
 	{
+		// ------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
 		//  Copy target sound files Only.
 		/// </summary>
@@ -36,38 +37,34 @@ namespace VirtualPlayerSetting.Common
 		}
 
 
-		static public bool FileLoad( string srcPath, ParameterDefine tempDirDef )
+		// ------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+		/// Playerファイルやフォルダをチェックしながらコピーする
+		/// </summary>
+		/// <param name="srcPath">コピー元</param>
+		/// <param name="tempDirDef">コピー先</param>
+		/// <returns></returns>
+		static public bool FileCheckCopy( string srcPath, string destPath )
 		{
-			ParameterDefine srcDirDef = new( srcPath );
+			// 直接コピーするとエラーのときに元に戻せなくなるので一時フォルダに一旦コピーする
+			string destTempPath = destPath + "_temp";
 
-			// Copy Icon File
-			if( File.Exists( srcDirDef.IconPath ) == false )
+			try
 			{
-				MessageBox.Show( "Icon Data Not Found." );
-				return false;
-			}
+				ParameterDefine srcDirDef = new( srcPath );
+				ParameterDefine destDirDef = new( destTempPath );
 
-			using( var iconImg = Image.FromFile( srcDirDef.IconPath ) )
-			{
-				int sz = ParameterDefine.IconSize;
-
-				if( iconImg.Width == sz && iconImg.Height == sz ) { }
-				else
+				// Copy Icon File
+				if( File.Exists( srcDirDef.IconPath ) == false )
 				{
-					MessageBox.Show( $"Icon Size Not {sz}x{sz}." );
+					MessageBox.Show( "Icon Data Not Found." );
 					return false;
 				}
-			}
 
-			File.Copy( srcDirDef.IconPath, tempDirDef.IconPath, true );
-
-
-			// Copy Cutin File
-			if( File.Exists( srcDirDef.CutinPath ) )
-			{
-				using( var iconImg = Image.FromFile( srcDirDef.CutinPath ) )
+				// Check image size
+				using( var iconImg = Image.FromFile( srcDirDef.IconPath ) )
 				{
-					int sz = ParameterDefine.CutinSize;
+					int sz = ParameterDefine.IconSize;
 
 					if( iconImg.Width == sz && iconImg.Height == sz ) { }
 					else
@@ -77,76 +74,41 @@ namespace VirtualPlayerSetting.Common
 					}
 				}
 
-				File.Copy( srcDirDef.CutinPath, tempDirDef.CutinPath, true );
-			}
-
-
-			// Copy Sound File
-			if( Directory.Exists( srcDirDef.OpeningSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.OpeningSoundPath, tempDirDef.OpeningSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.AttackSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.AttackSoundPath, tempDirDef.AttackSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.SkillSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.SkillSoundPath, tempDirDef.SkillSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.DieSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.DieSoundPath, tempDirDef.DieSoundPath );
-			}
-			if( Directory.Exists( srcDirDef.WinSoundPath ) )
-			{
-				SoundDirCopy( srcDirDef.WinSoundPath, tempDirDef.WinSoundPath );
-			}
-
-
-			return true;
-		}
-
-
-		static public bool FileSave( string destPath, ParameterDefine tempDirDef )
-		{
-			// Create backup
-			string backupPath = destPath + "_backup";
-
-			try
-			{
-				ParameterDefine destDirDef = new( backupPath );
-
-				// Copy Icon File
-				if( File.Exists( tempDirDef.IconPath ) == false )
-				{
-					MessageBox.Show( "Icon Data Not Found." );
-					return false;
-				}
-				File.Copy( tempDirDef.IconPath, destDirDef.IconPath, true );
+				File.Copy( srcDirDef.IconPath, destDirDef.IconPath, true );
 
 
 				// Copy Cutin File
-				if( File.Exists( tempDirDef.CutinPath ) )
+				if( File.Exists( srcDirDef.CutinPath ) )
 				{
-					File.Copy( tempDirDef.CutinPath, destDirDef.CutinPath, true );
+					// Check image size
+					using( var iconImg = Image.FromFile( srcDirDef.CutinPath ) )
+					{
+						int sz = ParameterDefine.CutinSize;
+
+						if( iconImg.Width == sz && iconImg.Height == sz ) { }
+						else
+						{
+							MessageBox.Show( $"Cutin Size Not {sz}x{sz}." );
+							return false;
+						}
+					}
+
+					File.Copy( srcDirDef.CutinPath, destDirDef.CutinPath, true );
 				}
 
-
 				// Copy Sound File
-				SoundDirCopy( tempDirDef.OpeningSoundPath, destDirDef.OpeningSoundPath );
-				SoundDirCopy( tempDirDef.AttackSoundPath, destDirDef.AttackSoundPath );
-				SoundDirCopy( tempDirDef.SkillSoundPath, destDirDef.SkillSoundPath );
-				SoundDirCopy( tempDirDef.DieSoundPath, destDirDef.DieSoundPath );
-				SoundDirCopy( tempDirDef.WinSoundPath, destDirDef.WinSoundPath );
-
+				SoundDirCopy( srcDirDef.OpeningSoundPath, destDirDef.OpeningSoundPath );
+				SoundDirCopy( srcDirDef.AttackSoundPath, destDirDef.AttackSoundPath );
+				SoundDirCopy( srcDirDef.SkillSoundPath, destDirDef.SkillSoundPath );
+				SoundDirCopy( srcDirDef.DieSoundPath, destDirDef.DieSoundPath );
+				SoundDirCopy( srcDirDef.WinSoundPath, destDirDef.WinSoundPath );
 
 				// フォルダが存在しないときにDeleteすると例外になるのでチェックする
 				if( Directory.Exists( destPath ) )
 				{
 					Directory.Delete( destPath, true );
 				}
-				Directory.Move( backupPath, destPath );
+				Directory.Move( destTempPath, destPath );
 			}
 			catch( Exception ex )
 			{
@@ -154,10 +116,10 @@ namespace VirtualPlayerSetting.Common
 			}
 			finally
 			{
-				// Delete backup directory.
-				if( Directory.Exists( backupPath ) )
+				// Delete temp directory.
+				if( Directory.Exists( destTempPath ) )
 				{
-					Directory.Delete( backupPath, true );
+					Directory.Delete( destTempPath, true );
 				}
 			}
 
