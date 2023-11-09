@@ -1,62 +1,67 @@
 ﻿using MLib;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
 using VirtualPlayerSetting.Common;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace VirtualPlayerSetting
 {
 	public partial class FrmSelectDir : Form
 	{
-		public string SelectedPlayerDirPath { get; private set; } = "";
+		/// <summary>
+		/// 選択されたフォルダのパス
+		/// </summary>
+		public string SelectedDirPath { get; private set; } = "";
 
 
 
 
+		// ----------------------------------------------------------------------------------------------------
 		public FrmSelectDir()
 		{
 			InitializeComponent();
 		}
 
 
+		// ----------------------------------------------------------------------------------------------------
 		void UpdatePlayerList()
 		{
 			var players = Directory.GetDirectories( PathMgr.VPlayer );
 
 			LbPlayer.Items.Clear();
-			foreach ( var player in players )
+			foreach( var player in players )
 			{
 				LbPlayer.Items.Add( Path.GetFileName( player )! );
 			}
 		}
 
 
-
-
+		// ----------------------------------------------------------------------------------------------------
+		/// <summary>
+		/// フォーム表示時にファイルからリスト読み込み
+		/// </summary>
 		private void FrmSelectDir_Load( object sender, EventArgs e )
 		{
 			UpdatePlayerList();
 		}
 
 
-
+		// ----------------------------------------------------------------------------------------------------
+		/// <summary>
+		/// ダブルクリックで読み込み
+		/// </summary>
 		private void LbPlayer_DoubleClick( object sender, EventArgs e )
 		{
-			SelectedPlayerDirPath = Path.Combine( PathMgr.VPlayer, LbPlayer.SelectedItem.ToString()! );
+			var name = LbPlayer.SelectedItem;
+			if( name == null ) return;
+
+			SelectedDirPath = Path.Combine( PathMgr.VPlayer, name.ToString()! );
 			DialogResult = DialogResult.OK;
 			Close();
 		}
 
 
-
+		// ----------------------------------------------------------------------------------------------------
+		/// <summary>
+		/// 外部ファイル読み込み
+		/// </summary>
 		private void BtnLoad_Click( object sender, EventArgs e )
 		{
 			FolderBrowserDialog ofd = new()
@@ -66,22 +71,19 @@ namespace VirtualPlayerSetting
 
 			var result = ofd.ShowDialog();
 
-			if( result == DialogResult.OK )
+			if( result != DialogResult.OK ) return;
+
+			// Copy to VPlayer dir.
+			string srcPath = ofd.SelectedPath;
+			string srcName = Path.GetFileName( srcPath )!;
+			string destPath = Path.Combine( PathMgr.VPlayer, srcName );
+
+			if( ParameterMgr.FileCheckCopy( srcPath, destPath ) == false )
 			{
-				// Copy to VPlayer dir.
-				string srcPath = ofd.SelectedPath;
-				string srcName = Path.GetDirectoryName( srcPath )!;
-
-				ParameterDefine src = new( srcPath );
-				string destPath = Path.Combine( PathMgr.VPlayer, srcName );
-
-				if( ParameterMgr.FileSave( destPath, src ) == false )
-				{
-					return;
-				}
-
-				UpdatePlayerList();
+				return;
 			}
+
+			UpdatePlayerList();
 
 		}
 

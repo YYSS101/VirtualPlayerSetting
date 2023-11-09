@@ -1,5 +1,4 @@
-﻿using MLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace VirtualPlayerSetting.Common
 {
+	// ------------------------------------------------------------------------------------------------------------------------
 	/// <summary>
 	/// Virtual Player Directory Define
 	/// </summary>
@@ -25,7 +25,8 @@ namespace VirtualPlayerSetting.Common
 		public const string DieSoundDir = "04_SoundDie";
 		public const string WinSoundDir = "05_SoundWin";
 
-		// ----------------------------------------------------------------------------------------------------
+		// ------------------------------------------------------------------------------------------------------------------------
+		public readonly string BaseDir;
 
 		public readonly string IconPath;
 		public readonly string CutinPath;
@@ -36,10 +37,12 @@ namespace VirtualPlayerSetting.Common
 		public readonly string DieSoundPath;
 		public readonly string WinSoundPath;
 
-		// ----------------------------------------------------------------------------------------------------
+		// ------------------------------------------------------------------------------------------------------------------------
 
 		public ParameterDefine( string baseDir, bool createDir = true )
 		{
+			BaseDir = baseDir;
+
 			IconPath = Path.Combine( baseDir, IconFileName );
 			CutinPath = Path.Combine( baseDir, CutinFileName );
 

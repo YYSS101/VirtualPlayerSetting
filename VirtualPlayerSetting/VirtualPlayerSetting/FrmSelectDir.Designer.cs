@@ -75,6 +75,7 @@
 			MaximizeBox = false;
 			MinimizeBox = false;
 			Name = "FrmSelectDir";
+			StartPosition = FormStartPosition.CenterParent;
 			Text = "FrmSelectDir";
 			Load += FrmSelectDir_Load;
 			ResumeLayout( false );

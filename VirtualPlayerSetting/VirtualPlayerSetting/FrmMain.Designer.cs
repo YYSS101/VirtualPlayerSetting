@@ -47,6 +47,10 @@
 			Rb5 = new RadioButton();
 			BtnNew = new Button();
 			BtnSoundStop = new Button();
+			label1 = new Label();
+			label2 = new Label();
+			label3 = new Label();
+			label4 = new Label();
 			( (System.ComponentModel.ISupportInitialize) PbIcon  ).BeginInit();
 			( (System.ComponentModel.ISupportInitialize) PbCutin  ).BeginInit();
 			SuspendLayout();
@@ -54,7 +58,7 @@
 			// PbIcon
 			// 
 			PbIcon.BorderStyle = BorderStyle.FixedSingle;
-			PbIcon.Location = new Point( 12, 65 );
+			PbIcon.Location = new Point( 12, 92 );
 			PbIcon.Name = "PbIcon";
 			PbIcon.Size = new Size( 128, 128 );
 			PbIcon.SizeMode = PictureBoxSizeMode.Zoom;
@@ -63,7 +67,7 @@
 			// 
 			// BtnIconAdd
 			// 
-			BtnIconAdd.Location = new Point( 12, 199 );
+			BtnIconAdd.Location = new Point( 12, 226 );
 			BtnIconAdd.Name = "BtnIconAdd";
 			BtnIconAdd.Size = new Size( 75, 23 );
 			BtnIconAdd.TabIndex = 1;
@@ -75,7 +79,7 @@
 			// 
 			LbSounds.FormattingEnabled = true;
 			LbSounds.ItemHeight = 15;
-			LbSounds.Location = new Point( 163, 92 );
+			LbSounds.Location = new Point( 163, 122 );
 			LbSounds.Name = "LbSounds";
 			LbSounds.Size = new Size( 399, 244 );
 			LbSounds.TabIndex = 2;
@@ -83,7 +87,7 @@
 			// 
 			// BtnSoundAdd
 			// 
-			BtnSoundAdd.Location = new Point( 163, 342 );
+			BtnSoundAdd.Location = new Point( 163, 372 );
 			BtnSoundAdd.Name = "BtnSoundAdd";
 			BtnSoundAdd.Size = new Size( 75, 23 );
 			BtnSoundAdd.TabIndex = 1;
@@ -93,7 +97,7 @@
 			// 
 			// BtnSoundDel
 			// 
-			BtnSoundDel.Location = new Point( 244, 342 );
+			BtnSoundDel.Location = new Point( 244, 372 );
 			BtnSoundDel.Name = "BtnSoundDel";
 			BtnSoundDel.Size = new Size( 47, 23 );
 			BtnSoundDel.TabIndex = 1;
@@ -114,7 +118,7 @@
 			// BtnSave
 			// 
 			BtnSave.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Right  ;
-			BtnSave.Location = new Point( 488, 384 );
+			BtnSave.Location = new Point( 488, 416 );
 			BtnSave.Name = "BtnSave";
 			BtnSave.Size = new Size( 75, 23 );
 			BtnSave.TabIndex = 1;
@@ -124,7 +128,7 @@
 			// 
 			// TbName
 			// 
-			TbName.Location = new Point( 162, 13 );
+			TbName.Location = new Point( 162, 36 );
 			TbName.Name = "TbName";
 			TbName.Size = new Size( 400, 23 );
 			TbName.TabIndex = 3;
@@ -132,7 +136,7 @@
 			// 
 			// BtnSoundPlay
 			// 
-			BtnSoundPlay.Location = new Point( 463, 342 );
+			BtnSoundPlay.Location = new Point( 463, 372 );
 			BtnSoundPlay.Name = "BtnSoundPlay";
 			BtnSoundPlay.Size = new Size( 47, 23 );
 			BtnSoundPlay.TabIndex = 1;
@@ -143,7 +147,7 @@
 			// PbCutin
 			// 
 			PbCutin.BorderStyle = BorderStyle.FixedSingle;
-			PbCutin.Location = new Point( 12, 254 );
+			PbCutin.Location = new Point( 12, 281 );
 			PbCutin.Name = "PbCutin";
 			PbCutin.Size = new Size( 128, 128 );
 			PbCutin.SizeMode = PictureBoxSizeMode.Zoom;
@@ -152,7 +156,7 @@
 			// 
 			// BtnCutinAdd
 			// 
-			BtnCutinAdd.Location = new Point( 12, 388 );
+			BtnCutinAdd.Location = new Point( 12, 415 );
 			BtnCutinAdd.Name = "BtnCutinAdd";
 			BtnCutinAdd.Size = new Size( 75, 23 );
 			BtnCutinAdd.TabIndex = 1;
@@ -162,18 +166,19 @@
 			// 
 			// BtnCutinDel
 			// 
-			BtnCutinDel.Location = new Point( 93, 388 );
+			BtnCutinDel.Location = new Point( 93, 415 );
 			BtnCutinDel.Name = "BtnCutinDel";
 			BtnCutinDel.Size = new Size( 47, 23 );
 			BtnCutinDel.TabIndex = 1;
 			BtnCutinDel.Text = "Del";
 			BtnCutinDel.UseVisualStyleBackColor = true;
+			BtnCutinDel.Click += BtnCutinDel_Click;
 			// 
 			// Rb1
 			// 
 			Rb1.Appearance = Appearance.Button;
 			Rb1.Checked = true;
-			Rb1.Location = new Point( 163, 62 );
+			Rb1.Location = new Point( 163, 92 );
 			Rb1.Name = "Rb1";
 			Rb1.Size = new Size( 55, 24 );
 			Rb1.TabIndex = 5;
@@ -186,7 +191,7 @@
 			// Rb2
 			// 
 			Rb2.Appearance = Appearance.Button;
-			Rb2.Location = new Point( 224, 62 );
+			Rb2.Location = new Point( 224, 92 );
 			Rb2.Name = "Rb2";
 			Rb2.Size = new Size( 55, 25 );
 			Rb2.TabIndex = 5;
@@ -198,7 +203,7 @@
 			// Rb3
 			// 
 			Rb3.Appearance = Appearance.Button;
-			Rb3.Location = new Point( 285, 62 );
+			Rb3.Location = new Point( 285, 92 );
 			Rb3.Name = "Rb3";
 			Rb3.Size = new Size( 55, 25 );
 			Rb3.TabIndex = 5;
@@ -210,7 +215,7 @@
 			// Rb4
 			// 
 			Rb4.Appearance = Appearance.Button;
-			Rb4.Location = new Point( 346, 62 );
+			Rb4.Location = new Point( 346, 92 );
 			Rb4.Name = "Rb4";
 			Rb4.Size = new Size( 55, 25 );
 			Rb4.TabIndex = 5;
@@ -222,7 +227,7 @@
 			// Rb5
 			// 
 			Rb5.Appearance = Appearance.Button;
-			Rb5.Location = new Point( 407, 62 );
+			Rb5.Location = new Point( 407, 92 );
 			Rb5.Name = "Rb5";
 			Rb5.Size = new Size( 55, 25 );
 			Rb5.TabIndex = 5;
@@ -243,7 +248,7 @@
 			// 
 			// BtnSoundStop
 			// 
-			BtnSoundStop.Location = new Point( 516, 342 );
+			BtnSoundStop.Location = new Point( 516, 372 );
 			BtnSoundStop.Name = "BtnSoundStop";
 			BtnSoundStop.Size = new Size( 47, 23 );
 			BtnSoundStop.TabIndex = 1;
@@ -251,11 +256,51 @@
 			BtnSoundStop.UseVisualStyleBackColor = true;
 			BtnSoundStop.Click += BtnSoundStop_Click;
 			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new Point( 163, 20 );
+			label1.Name = "label1";
+			label1.Size = new Size( 38, 15 );
+			label1.TabIndex = 6;
+			label1.Text = "Name";
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new Point( 12, 72 );
+			label2.Name = "label2";
+			label2.Size = new Size( 30, 15 );
+			label2.TabIndex = 6;
+			label2.Text = "Icon";
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new Point( 12, 263 );
+			label3.Name = "label3";
+			label3.Size = new Size( 35, 15 );
+			label3.TabIndex = 6;
+			label3.Text = "Cutin";
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Location = new Point( 163, 72 );
+			label4.Name = "label4";
+			label4.Size = new Size( 41, 15 );
+			label4.TabIndex = 6;
+			label4.Text = "Sound";
+			// 
 			// FrmMain
 			// 
 			AutoScaleDimensions = new SizeF( 7F, 15F );
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size( 573, 419 );
+			ClientSize = new Size( 573, 451 );
+			Controls.Add( label3 );
+			Controls.Add( label2 );
+			Controls.Add( label4 );
+			Controls.Add( label1 );
 			Controls.Add( Rb5 );
 			Controls.Add( Rb4 );
 			Controls.Add( Rb3 );
@@ -279,7 +324,8 @@
 			MaximizeBox = false;
 			MinimizeBox = false;
 			Name = "FrmMain";
-			Text = "Form1";
+			StartPosition = FormStartPosition.CenterScreen;
+			Text = "VPS";
 			FormClosed += FrmMain_FormClosed;
 			Load += Form1_Load;
 			( (System.ComponentModel.ISupportInitialize) PbIcon  ).EndInit();
@@ -309,5 +355,9 @@
 		private RadioButton Rb5;
 		private Button BtnNew;
 		private Button BtnSoundStop;
+		private Label label1;
+		private Label label2;
+		private Label label3;
+		private Label label4;
 	}
 }

@@ -25,11 +25,16 @@ namespace VirtualPlayerSetting
 		ParameterDefine TempDirDef = new( "", false );
 
 
-
-
+		// ------------------------------------------------------------------------------------------------------------------------
 		public FrmMain()
 		{
 			InitializeComponent();
+
+			// バージョンの取得
+			System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+			Version ver = asm.GetName().Version!;
+
+			Text += $" - Ver{ver.Major}.{ver.Minor}.{ver.Build}";
 
 
 			var sysParam = new SystemParam();
@@ -53,14 +58,14 @@ namespace VirtualPlayerSetting
 		}
 
 
-
-
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void Form1_Load( object sender, EventArgs e )
 		{
 			TempDirInit();
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void FrmMain_FormClosed( object sender, FormClosedEventArgs e )
 		{
 			ViewAllClear();
@@ -71,12 +76,14 @@ namespace VirtualPlayerSetting
 
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		void TempDirInit()
 		{
 			Directory.Delete( PathMgr.Temp, true );
 			TempDirDef = new( PathMgr.Temp );
 		}
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		void ViewAllClear()
 		{
 			TbName.Clear();
@@ -88,6 +95,7 @@ namespace VirtualPlayerSetting
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		void ClearIcon()
 		{
 			if( PbIcon.Image != null )
@@ -96,6 +104,14 @@ namespace VirtualPlayerSetting
 				PbIcon.Image = null;
 			}
 		}
+		void UpdateIcon()
+		{
+			ClearIcon();
+			string imgPath = TempDirDef.IconPath;
+			PbIcon.Image = Image.FromFile( imgPath );
+		}
+
+		// ------------------------------------------------------------------------------------------------------------------------
 		void ClearCutin()
 		{
 			if( PbCutin.Image != null )
@@ -104,23 +120,17 @@ namespace VirtualPlayerSetting
 				PbCutin.Image = null;
 			}
 		}
-
-
-
-		void UpdateIcon()
-		{
-			ClearIcon();
-			string imgPath = TempDirDef.IconPath;
-			PbIcon.Image = Image.FromFile( imgPath );
-		}
-
 		void UpdateCutin()
 		{
 			ClearCutin();
 			string imgPath = TempDirDef.CutinPath;
-			PbCutin.Image = Image.FromFile( imgPath );
+			if( File.Exists( imgPath ) )
+			{
+				PbCutin.Image = Image.FromFile( imgPath );
+			}
 		}
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		void UpdateSoundList()
 		{
 			LbSounds.Items.Clear();
@@ -137,6 +147,7 @@ namespace VirtualPlayerSetting
 
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnNew_Click( object sender, EventArgs e )
 		{
 			if( TbName.Text != "" )
@@ -152,6 +163,7 @@ namespace VirtualPlayerSetting
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnLoad_Click( object sender, EventArgs e )
 		{
 			FrmSelectDir dialog = new();
@@ -160,17 +172,19 @@ namespace VirtualPlayerSetting
 
 			if( result != DialogResult.OK ) return;
 
-			string srcPath = dialog.SelectedPlayerDirPath;
+			ViewAllClear();
 
-			if( ParameterMgr.FileLoad( srcPath, TempDirDef ) == false )
+			string srcPath = dialog.SelectedDirPath;
+
+			if( ParameterMgr.FileCheckCopy( srcPath, TempDirDef.BaseDir ) == false )
 			{
 				return;
 			}
 
-			string srcName = Path.GetDirectoryName( srcPath )!;
+			string srcName = Path.GetFileName( srcPath )!;
 
 			// UI更新
-			TbName.Text = Path.GetFileName( srcName );
+			TbName.Text = srcName;
 
 
 			UpdateIcon();
@@ -180,6 +194,7 @@ namespace VirtualPlayerSetting
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnSave_Click( object sender, EventArgs e )
 		{
 			try
@@ -201,7 +216,7 @@ namespace VirtualPlayerSetting
 					if( ret != DialogResult.Yes ) return;
 				}
 
-				if( ParameterMgr.FileSave( destPath, TempDirDef ) == false )
+				if( ParameterMgr.FileCheckCopy( TempDirDef.BaseDir, destPath ) == false )
 				{
 					return;
 				}
@@ -217,6 +232,7 @@ namespace VirtualPlayerSetting
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void TbName_KeyPress( object sender, KeyPressEventArgs e )
 		{
 			var tb = (System.Windows.Forms.TextBox)sender;
@@ -230,6 +246,7 @@ namespace VirtualPlayerSetting
 
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnIconAdd_Click( object sender, EventArgs e )
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
@@ -240,12 +257,14 @@ namespace VirtualPlayerSetting
 			var result = ofd.ShowDialog();
 			if( result == DialogResult.OK )
 			{
+				ClearIcon();
 				ImageAdd( ofd.FileName, TempDirDef.IconPath, ParameterDefine.IconSize );
 				UpdateIcon();
 			}
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnCutinAdd_Click( object sender, EventArgs e )
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
@@ -256,13 +275,14 @@ namespace VirtualPlayerSetting
 			var result = ofd.ShowDialog();
 			if( result == DialogResult.OK )
 			{
+				ClearCutin();
 				ImageAdd( ofd.FileName, TempDirDef.CutinPath, ParameterDefine.CutinSize );
 				UpdateCutin();
 			}
 		}
 
 
-
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void ImageAdd( string srcImgPath, string destImgPath, int imgSize )
 		{
 			try
@@ -284,11 +304,25 @@ namespace VirtualPlayerSetting
 				{
 					string backupPath = destImgPath + "_backup";
 
-					// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
-					resizedImage.Save( backupPath, ImageFormat.Png );
-					ClearIcon();
-					File.Delete( destImgPath );
-					File.Move( backupPath, destImgPath );
+					try
+					{
+						// 生成や削除に失敗した時にファイルを復元出来るようバックアップしておく
+						resizedImage.Save( backupPath, ImageFormat.Png );
+						File.Delete( destImgPath );
+						File.Move( backupPath, destImgPath );
+					}
+					catch( Exception ex )
+					{
+						MessageBox.Show( "Non-supported images." );
+						SimpleLog.WriteLine( $"src:{srcImgPath}, dest:{destImgPath}, {ex.Message}" );
+					}
+					finally
+					{
+						if( File.Exists( backupPath ) )
+						{
+							File.Delete( backupPath );
+						}
+					}
 				}
 				else
 				{
@@ -297,15 +331,33 @@ namespace VirtualPlayerSetting
 			}
 			catch( Exception ex )
 			{
-				MessageBox.Show( "非対応の画像形式です。" );
+				MessageBox.Show( "Non-supported images." );
 				SimpleLog.WriteLine( $"src:{srcImgPath}, dest:{destImgPath}, {ex.Message}" );
+			}
+		}
+
+		// ------------------------------------------------------------------------------------------------------------------------
+		private void BtnCutinDel_Click( object sender, EventArgs e )
+		{
+			if( File.Exists( TempDirDef.CutinPath ) == false ) return;
+
+			string mes = "Do you want to delete it?";
+			var result = MessageBox.Show( mes, "Info", MessageBoxButtons.YesNo );
+
+			if( result != DialogResult.Yes ) return;
+
+			ClearCutin();
+
+			if( File.Exists( TempDirDef.CutinPath ) )
+			{
+				File.Delete( TempDirDef.CutinPath );
 			}
 		}
 
 
 
 
-
+		// ------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
 		/// Get directory path from selected radio button
 		/// </summary>
@@ -324,12 +376,14 @@ namespace VirtualPlayerSetting
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void SoundSelect_CheckedChanged( object sender, EventArgs e )
 		{
 			UpdateSoundList();
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnSoundAdd_Click( object sender, EventArgs e )
 		{
 			OpenFileDialog ofd = new OpenFileDialog()
@@ -352,12 +406,14 @@ namespace VirtualPlayerSetting
 			}
 		}
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnSoundDel_Click( object sender, EventArgs e )
 		{
 			ListRemove( LbSounds, SelectingSoundPath );
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void ListRemove( ListBox lb, string dataDirPath )
 		{
 			if( lb.SelectedIndex != -1 )
@@ -383,6 +439,7 @@ namespace VirtualPlayerSetting
 
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		void PlaySound( ListBox lb )
 		{
 			string soundName = lb.SelectedItem.ToString()!;
@@ -399,23 +456,25 @@ namespace VirtualPlayerSetting
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnSoundPlay_Click( object sender, EventArgs e )
 		{
 			PlaySound( LbSounds );
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void LbSounds_DoubleClick( object sender, EventArgs e )
 		{
 			PlaySound( LbSounds );
 		}
 
 
+		// ------------------------------------------------------------------------------------------------------------------------
 		private void BtnSoundStop_Click( object sender, EventArgs e )
 		{
 			SoundMgr?.Stop();
 		}
-
 
 
 	}
