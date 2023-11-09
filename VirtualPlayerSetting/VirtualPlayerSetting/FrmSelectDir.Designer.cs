@@ -69,9 +69,9 @@
 			// 
 			BtnDelete.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Right  ;
 			BtnDelete.BackColor = Color.SandyBrown;
-			BtnDelete.Location = new Point( 336, 341 );
+			BtnDelete.Location = new Point( 336, 347 );
 			BtnDelete.Name = "BtnDelete";
-			BtnDelete.Size = new Size( 44, 31 );
+			BtnDelete.Size = new Size( 44, 25 );
 			BtnDelete.TabIndex = 1;
 			BtnDelete.Text = "Del";
 			BtnDelete.UseVisualStyleBackColor = false;
@@ -90,7 +90,7 @@
 			MinimizeBox = false;
 			Name = "FrmSelectDir";
 			StartPosition = FormStartPosition.CenterParent;
-			Text = "FrmSelectDir";
+			Text = "Select";
 			Load += FrmSelectDir_Load;
 			ResumeLayout( false );
 			PerformLayout();
