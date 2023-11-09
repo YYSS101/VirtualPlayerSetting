@@ -35,26 +35,6 @@ namespace VirtualPlayerSetting
 			Version ver = asm.GetName().Version!;
 
 			Text += $" - Ver{ver.Major}.{ver.Minor}.{ver.Build}";
-
-
-			var sysParam = new SystemParam();
-
-			JsonSerializerOptions options = new JsonSerializerOptions()
-			{
-				WriteIndented = true,
-			};
-
-			string json = JsonSerializer.Serialize( sysParam, options );
-
-			string jsonPath = Path.Combine( PathMgr.Parameter, "SystemParam.json" );
-
-			File.WriteAllText( jsonPath, json );
-
-
-			string dJson = File.ReadAllText( jsonPath );
-
-			var sysParam2 = JsonSerializer.Deserialize<SystemParam>( dJson );
-
 		}
 
 

@@ -87,6 +87,26 @@ namespace VirtualPlayerSetting
 
 		}
 
+		// ----------------------------------------------------------------------------------------------------
+		private void BtnDelete_Click( object sender, EventArgs e )
+		{
+			var name = LbPlayer.SelectedItem;
+			if( name == null ) return;
+
+			string mes = "Do you want to delete it?";
+			var ret = MessageBox.Show( mes, "Warning", MessageBoxButtons.YesNo );
+
+			if( ret != DialogResult.Yes ) return;
+
+			var fullPath = Path.Combine( PathMgr.VPlayer, name.ToString()! );
+
+			if( Directory.Exists( fullPath ) )
+			{
+				Directory.Delete( fullPath, true );
+			}
+			UpdatePlayerList();
+		}
+
 
 	}
 }

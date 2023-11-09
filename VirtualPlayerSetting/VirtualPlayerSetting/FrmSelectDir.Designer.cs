@@ -31,6 +31,7 @@
 			LbPlayer = new ListBox();
 			BtnLoad = new Button();
 			label1 = new Label();
+			BtnDelete = new Button();
 			SuspendLayout();
 			// 
 			// LbPlayer
@@ -64,12 +65,25 @@
 			label1.TabIndex = 2;
 			label1.Text = "Double-click to load";
 			// 
+			// BtnDelete
+			// 
+			BtnDelete.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Right  ;
+			BtnDelete.BackColor = Color.SandyBrown;
+			BtnDelete.Location = new Point( 336, 341 );
+			BtnDelete.Name = "BtnDelete";
+			BtnDelete.Size = new Size( 44, 31 );
+			BtnDelete.TabIndex = 1;
+			BtnDelete.Text = "Del";
+			BtnDelete.UseVisualStyleBackColor = false;
+			BtnDelete.Click += BtnDelete_Click;
+			// 
 			// FrmSelectDir
 			// 
 			AutoScaleDimensions = new SizeF( 7F, 15F );
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size( 392, 384 );
 			Controls.Add( label1 );
+			Controls.Add( BtnDelete );
 			Controls.Add( BtnLoad );
 			Controls.Add( LbPlayer );
 			MaximizeBox = false;
@@ -87,5 +101,6 @@
 		private ListBox LbPlayer;
 		private Button BtnLoad;
 		private Label label1;
+		private Button BtnDelete;
 	}
 }
