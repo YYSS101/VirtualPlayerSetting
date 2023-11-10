@@ -68,6 +68,8 @@ namespace VirtualPlayerSetting
 		{
 			TbName.Clear();
 
+			SoundMgr.DeleteSound();
+
 			ClearIcon();
 			ClearCutin();
 			Rb1.Checked = true;

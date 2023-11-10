@@ -29,9 +29,10 @@
 		private void InitializeComponent()
 		{
 			LbPlayer = new ListBox();
-			BtnLoad = new Button();
 			label1 = new Label();
 			BtnDelete = new Button();
+			BtnExport = new Button();
+			BtnImport = new Button();
 			SuspendLayout();
 			// 
 			// LbPlayer
@@ -41,20 +42,10 @@
 			LbPlayer.ItemHeight = 15;
 			LbPlayer.Location = new Point( 12, 27 );
 			LbPlayer.Name = "LbPlayer";
+			LbPlayer.SelectionMode = SelectionMode.MultiExtended;
 			LbPlayer.Size = new Size( 368, 304 );
 			LbPlayer.TabIndex = 0;
 			LbPlayer.DoubleClick += LbPlayer_DoubleClick;
-			// 
-			// BtnLoad
-			// 
-			BtnLoad.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Left  ;
-			BtnLoad.Location = new Point( 12, 341 );
-			BtnLoad.Name = "BtnLoad";
-			BtnLoad.Size = new Size( 105, 31 );
-			BtnLoad.TabIndex = 1;
-			BtnLoad.Text = "Load External";
-			BtnLoad.UseVisualStyleBackColor = true;
-			BtnLoad.Click += BtnLoad_Click;
 			// 
 			// label1
 			// 
@@ -77,6 +68,28 @@
 			BtnDelete.UseVisualStyleBackColor = false;
 			BtnDelete.Click += BtnDelete_Click;
 			// 
+			// BtnExport
+			// 
+			BtnExport.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Left  ;
+			BtnExport.Location = new Point( 12, 341 );
+			BtnExport.Name = "BtnExport";
+			BtnExport.Size = new Size( 59, 31 );
+			BtnExport.TabIndex = 1;
+			BtnExport.Text = "Export";
+			BtnExport.UseVisualStyleBackColor = true;
+			BtnExport.Click += BtnExport_Click;
+			// 
+			// BtnImport
+			// 
+			BtnImport.Anchor =   AnchorStyles.Bottom  |  AnchorStyles.Left  ;
+			BtnImport.Location = new Point( 77, 341 );
+			BtnImport.Name = "BtnImport";
+			BtnImport.Size = new Size( 59, 31 );
+			BtnImport.TabIndex = 1;
+			BtnImport.Text = "Import";
+			BtnImport.UseVisualStyleBackColor = true;
+			BtnImport.Click += BtnImport_Click;
+			// 
 			// FrmSelectDir
 			// 
 			AutoScaleDimensions = new SizeF( 7F, 15F );
@@ -84,7 +97,8 @@
 			ClientSize = new Size( 392, 384 );
 			Controls.Add( label1 );
 			Controls.Add( BtnDelete );
-			Controls.Add( BtnLoad );
+			Controls.Add( BtnImport );
+			Controls.Add( BtnExport );
 			Controls.Add( LbPlayer );
 			MaximizeBox = false;
 			MinimizeBox = false;
@@ -99,8 +113,9 @@
 		#endregion
 
 		private ListBox LbPlayer;
-		private Button BtnLoad;
 		private Label label1;
 		private Button BtnDelete;
+		private Button BtnExport;
+		private Button BtnImport;
 	}
 }
