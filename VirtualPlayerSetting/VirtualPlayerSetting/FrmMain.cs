@@ -398,22 +398,27 @@ namespace VirtualPlayerSetting
 		// ------------------------------------------------------------------------------------------------------------------------
 		private void ListRemove( ListBox lb, string dataDirPath )
 		{
-			if( lb.SelectedIndex != -1 )
+			var name = lb.SelectedItem;
+			if( name == null )
 			{
-				string[] files = Directory.GetFiles( dataDirPath );
-				string delFileName = lb.SelectedItem.ToString()!;
-
-				foreach( string file in files )
-				{
-					if( file.Contains( delFileName ) )
-					{
-						File.Delete( file );
-						break;
-					}
-				}
-
-				UpdateSoundList();
+				MessageBox.Show( "Please select Sound." );
+				return;
 			}
+
+			string[] files = Directory.GetFiles( dataDirPath );
+			string delFileName = lb.SelectedItem.ToString()!;
+
+			foreach( string file in files )
+			{
+				if( file.Contains( delFileName ) )
+				{
+					SoundMgr.DeleteSound();
+					File.Delete( file );
+					break;
+				}
+			}
+
+			UpdateSoundList();
 		}
 
 
@@ -424,6 +429,13 @@ namespace VirtualPlayerSetting
 		// ------------------------------------------------------------------------------------------------------------------------
 		void PlaySound( ListBox lb )
 		{
+			var name = LbSounds.SelectedItem;
+			if( name == null )
+			{
+				MessageBox.Show( "Please select Sound." );
+				return;
+			}
+
 			string soundName = lb.SelectedItem.ToString()!;
 			string soundPath = Path.Combine( SelectingSoundPath, soundName );
 

@@ -130,7 +130,7 @@ namespace VirtualPlayerSetting
 			OpenFileDialog dlg = new()
 			{
 				InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.DesktopDirectory ),
-				Filter = "VPファイル(*.ysvp)|*.ysvp",
+				Filter = "Virtual Player File(*.ysvp)|*.ysvp",
 				Multiselect = true,
 			};
 			var result = dlg.ShowDialog();
