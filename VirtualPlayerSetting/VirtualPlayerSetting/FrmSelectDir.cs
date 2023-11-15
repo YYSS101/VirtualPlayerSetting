@@ -1,6 +1,8 @@
 ﻿using MLib;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 using VirtualPlayerSetting.Common;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VirtualPlayerSetting
 {
@@ -27,7 +29,12 @@ namespace VirtualPlayerSetting
 			LbPlayer.Items.Clear();
 			foreach( var player in players )
 			{
-				LbPlayer.Items.Add( Path.GetFileName( player )! );
+				string name = Path.GetFileName( player )!;
+
+				// 全角が含まれていたら処理しない
+				if( Regex.IsMatch( name, @"^[a-zA-Z0-9()\-_]+$" ) == false ) continue;
+
+				LbPlayer.Items.Add( name );
 			}
 		}
 
