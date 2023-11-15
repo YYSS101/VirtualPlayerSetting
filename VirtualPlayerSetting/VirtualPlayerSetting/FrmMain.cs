@@ -220,7 +220,7 @@ namespace VirtualPlayerSetting
 			var tb = (System.Windows.Forms.TextBox)sender;
 
 			string inputText = tb.Text + e.KeyChar;
-			if( !Regex.IsMatch( inputText, "^[a-zA-Z0-9!@#$%&()\\-_+]*$" ) && e.KeyChar != (char)Keys.Back )
+			if( !Regex.IsMatch( inputText, "^[a-zA-Z0-9()\\-_]*$" ) && e.KeyChar != (char)Keys.Back )
 			{
 				e.Handled = true; // ”ñ‰pŒê‚Ì•¶Žš‚ð–³Œø‚É‚·‚é
 			}
