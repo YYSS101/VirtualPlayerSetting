@@ -405,19 +405,21 @@ namespace VirtualPlayerSetting
 				return;
 			}
 
-			string[] files = Directory.GetFiles( dataDirPath );
-			string delFileName = lb.SelectedItem.ToString()!;
-
-			foreach( string file in files )
+			foreach( var item in lb.SelectedItems )
 			{
-				if( file.Contains( delFileName ) )
+				string[] files = Directory.GetFiles( dataDirPath );
+				string delFileName = item.ToString()!;
+
+				foreach( string file in files )
 				{
-					SoundMgr.DeleteSound();
-					File.Delete( file );
-					break;
+					if( file.Contains( delFileName ) )
+					{
+						SoundMgr.DeleteSound();
+						File.Delete( file );
+						break;
+					}
 				}
 			}
-
 			UpdateSoundList();
 		}
 

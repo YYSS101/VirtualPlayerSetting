@@ -82,6 +82,7 @@
 			LbSounds.ItemHeight =  15 ;
 			LbSounds.Location =  new Point( 163, 122 ) ;
 			LbSounds.Name =  "LbSounds" ;
+			LbSounds.SelectionMode =  SelectionMode.MultiExtended ;
 			LbSounds.Size =  new Size( 399, 244 ) ;
 			LbSounds.TabIndex =  2 ;
 			LbSounds.DoubleClick +=  LbSounds_DoubleClick ;
